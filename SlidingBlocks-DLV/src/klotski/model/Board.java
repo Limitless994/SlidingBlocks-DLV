@@ -39,6 +39,8 @@ public class Board {
 		this.width = 4;
 		matrix=new int[height][width];
 		initMatrix();
+		setMatrix();
+		setInstance();
 	}
 
 	/**
@@ -336,12 +338,13 @@ public class Board {
 		String instance="";
 		for(int i= 0; i<height;i++) {
 			for(int j= 0; j<width;j++) {
-				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
+				if(matrix[i][j]==0) instance=(instance + new String("empty("+j+","+i+").\n"));
 			}
 		}
-
+		int id=0;
 		for (Piece p : pieces) {
-			instance=(instance + new String("blocco("+p.x+", "+p.y+", "+p.w+", "+p.h+").\n"));
+			instance=(instance + new String("blocco("+id+", "+p.x+", "+p.y+", "+p.w+", "+p.h+").\n"));
+			id++;
 		}
 
 		try {

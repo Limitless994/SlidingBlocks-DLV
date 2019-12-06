@@ -40,7 +40,7 @@ public class Main {
 		
 		int n=0;
 		for(AnswerSet a:answers.getAnswersets()){
-//			 System.out.println("AS n.: " + ++n + ": " + a);
+			 System.out.println("AS n.: " + ++n + ": " + a);
 //			System.out.println(a.getAnswerSet().get(1));
 //			try {
 //
