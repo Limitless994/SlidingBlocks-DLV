@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.StringTokenizer;
+import javafx.util.Pair;
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
 import it.unical.mat.embasp.base.Output;
@@ -20,7 +22,14 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
  * @author Joseph Petitti
  *
  */
+
 public class Board {
+	public String encodingResource="encodings/SlidingBlocks-Rules";
+	public String instanceResource="encodings/SlidingBlocks-instance";
+	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv.mingw.exe"));
+	public InputProgram  program = new ASPInputProgram();
+	List<String> listaMosse = new ArrayList<String>();
+	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
 	Piece[] pieces;
 	Piece selected;
 	int height;
@@ -374,20 +383,45 @@ public class Board {
 			e.printStackTrace();
 		}
 		//da generalizzare
-		String encodingResource="encodings/SlidingBlocks-Rules";
-		String instanceResource="encodings/SlidingBlocks-instance";
-		Handler handler;
-		handler = new DesktopHandler(new DLVDesktopService("lib/dlv.mingw.exe"));
-		InputProgram  program = new ASPInputProgram();
+
 		program.addFilesPath(encodingResource);
 		program.addFilesPath(instanceResource);
 		handler.addProgram(program);
-
 		Output o =  handler.startSync();
 		
 		AnswerSets answers = (AnswerSets) o;
 		for(AnswerSet a:answers.getAnswersets()){
-			 System.out.println(a);
+			//if(a.toString()=="canMove")
+			//System.out.println("AS n.: " + ++n + ": " + a);
+			String s2 = a.toString();
+			String nextInstance="";
+			StringTokenizer st = new StringTokenizer(s2);
+			while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
+				String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
+
+				if(temp.contains("canMoveDown")||temp.contains("canMoveRight")||temp.toString().contains("canMoveUP")||temp.toString().contains("canMoveLeft")) {
+					temp = temp.replace(temp.substring(temp.length()-1), "");
+					listaMosse.add(temp);
+					nextInstance=(nextInstance +temp+".\n");
+				}
+				Path path2 = Paths.get("encodings\\Sliding-blocks-Next-Step");
+
+				try {
+					Files.write(path2, nextInstance.getBytes());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		}
+		for(String t:listaMosse) {
+			Pair<String,String> current=new Pair(t+".\n",instance);
+			Nodi.add(current);
+		}
+		for(Pair<String,String> pair: Nodi) {
+			System.out.println("Pair " + pair.getKey()+ pair.getValue());
 		}
 	}
 
