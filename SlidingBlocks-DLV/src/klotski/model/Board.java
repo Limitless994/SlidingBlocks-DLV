@@ -303,20 +303,22 @@ public class Board {
 
 	public void setMatrix() {
 		initMatrix();
+		int id=0;
 		System.out.println();
 		for (Piece p : pieces) {
 			for(int i=p.y;i<p.y+p.h;i++) {
 				for(int j=p.x;j<p.x+p.w;j++) {
-					matrix[i][j]=1;
+					matrix[i][j]=1+id;
 				}
 			}
+			id++;
 		}
 	}
 
 	public void printMatrix() {
 		for(int i=0;i<height;i++) {
 			for(int j=0;j<width;j++) {
-				System.out.print(matrix[i][j] + " ");
+				System.out.print(matrix[i][j] + "  ");
 			}
 			System.out.println("\n");
 		}
@@ -341,8 +343,6 @@ public class Board {
 		for (Piece p : pieces) {
 			instance=(instance + new String("blocco("+p.x+", "+p.y+", "+p.w+", "+p.h+").\n"));
 		}
-		
-		
 
 		try {
 			Files.write(path, instance.getBytes());

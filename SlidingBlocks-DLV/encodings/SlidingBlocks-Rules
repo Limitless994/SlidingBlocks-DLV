@@ -1,1 +1,16 @@
-canMove(X,Y) |canMove(Y,Y) :-piece(X,Y,_,_).
+suggestedMovesDown(ID):-canMoveDown(ID),not inRightPlace(ID).
+suggestedMovesUp(ID):-canMoveUp(ID),not inRightPlace(ID).
+suggestedMovesLeft(ID):-canMoveLeft(ID),not inRightPlace(ID).
+suggestedMovesRight(ID):-canMoveRight(ID),not inRightPlace(ID). 
+empty(X,Y):-canMoveDown(V),cell(X,Y,V,_).
+cell(X,Y,V,K):-cell(X,Y,V,K),not canMoveDown(V).
+cell(X,Y,V,K):-empty(X,Y),K=V+1,canMoveDown(V).
+
+empty(X,Y):-canMoveUp(V),cell(X,Y,V,_).
+cell(X,Y,V,K):-cell(X,Y,V,K),not canMoveUp(V).
+
+empty(X,Y):-canMoveLeft(V),cell(X,Y,V,_).
+cell(X,Y,V,K):-cell(X,Y,V,K),not canMoveLeft(V).
+
+empty(X,Y):-canMoveRight(V),cell(X,Y,V,_).
+cell(X,Y,V,K):-cell(X,Y,V,K),not canMoveRight(V). 
