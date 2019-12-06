@@ -1,1 +1,1 @@
-canMove(X,Y) |canMove(Y,Y) :-blocco(X,Y,_,_).
+canMove(X,Y) |canMove(Y,Y) :-piece(X,Y,_,_).

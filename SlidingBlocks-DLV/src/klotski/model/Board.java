@@ -1,6 +1,13 @@
 package klotski.model;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+
+import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.languages.asp.ASPInputProgram;
 
 /**
  * Represents the entire game board, containing several pieces
@@ -15,7 +22,7 @@ public class Board {
 	int moves; // number of moves the player has made
 	int configuration;
 	boolean hasWon;
-	
+	int [][]matrix;
 	/**
 	 * Basic constructor. Initializes height and width to standard klotski size.
 	 * Initializes pieces to configuration 1
@@ -23,15 +30,17 @@ public class Board {
 	public Board() {
 		this.pieces = new Piece[10];
 		this.configuration = 1;
-		
+
 		// initialize all pieces to configuration 1, set moves to 0, set
 		// selectedPiece to null, and set hasWon to false
 		reset();
-		
+
 		this.height = 5;
 		this.width = 4;
+		matrix=new int[height][width];
+		initMatrix();
 	}
-	
+
 	/**
 	 * Custom constructor that uses a custom array of pieces
 	 * @param pieces the custom array of pieces that this board holds
@@ -45,7 +54,7 @@ public class Board {
 		this.hasWon = false;
 		this.selected = null;
 	}
-	
+
 	/**
 	 * Sets configuration to the given number
 	 * @param number input to set configuration to
@@ -53,7 +62,7 @@ public class Board {
 	public void setConfig(int number) {
 		this.configuration = number;
 	}
-	
+
 	/**
 	 * Reads in a set a lines representing a board state and sets the pieces of
 	 * this board to match it
@@ -78,43 +87,43 @@ public class Board {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * hasWon getter
 	 * @return whether the play has won
 	 */
 	public boolean checkWin() { return hasWon; }
-	
+
 	/**
 	 * move getter
 	 * @return the current number of moves
 	 */
 	public int getMoves() { return moves; }
-	
+
 	/**
 	 * selectedPiece getter
 	 * @return this board's selectedPiece
 	 */
 	public Piece getSelectedPiece() { return selected; }
-	
+
 	/**
 	 * width getter
 	 * @return this board's width
 	 */
 	public int getWidth() { return width; }
-	
+
 	/**
 	 * height getter
 	 * @return this board's height
 	 */
 	public int getHeight() { return height; }
-	
+
 	/**
 	 * pieces getter
 	 * @return this board's pieces
 	 */
 	public Piece[] getPieces() { return pieces; }
-	
+
 	/**
 	 * selects the piece at the given x and y coordinates
 	 * @param x the x coordinate of the point in the piece you want to select
@@ -128,13 +137,13 @@ public class Board {
 				return true;
 			}
 		}
-		
+
 		// if we get here then they clicked on an empty square, so deselect
 		// the piece
 		selected = null;
 		return false;
 	}
-	
+
 	/**
 	 * Checks whether there is a piece occupying a given point
 	 * @param x the x coordinate of the point to check
@@ -147,10 +156,10 @@ public class Board {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Tries to move the selected piece in the given direction
 	 * @param direction 0=up, 1=right, 2=down, 3=left
@@ -158,19 +167,19 @@ public class Board {
 	 */
 	public boolean movePiece(int direction) {
 		int i;
-		
+
 		// if there's no selected piece we can't move, so just return false
 		if (selected == null) {
 			return false;
 		}
-		
+
 		// check for a win
 		if (selected == pieces[0] && selected.x == 1 &&
 				selected.y == 3 && direction == 2) {
 			hasWon = true;
 			return true;
 		}
-		
+
 		if (direction == 0) {
 			// up
 			if (selected.y == 0) return false;
@@ -210,10 +219,14 @@ public class Board {
 		} else {
 			throw new IllegalArgumentException("direction must be 0..3");
 		}
-		
+
 		// if we've gotten here it means we're clear to move the selected piece
 		selected.move(direction);
 		++moves;
+		setMatrix();
+		setInstance();
+		printMatrix();
+
 		return true;
 	}
 
@@ -268,12 +281,13 @@ public class Board {
 			pieces[8] = new Piece(0, 4, 1, 1);
 			pieces[9] = new Piece(3, 4, 1, 1);
 		}
-		
+
 		moves = 0;
 		selected = null;
 		hasWon = false;
+
 	}
-	
+
 	/**
 	 * Converts the entire board to a string, for saving
 	 * @return the String version of this board
@@ -286,4 +300,55 @@ public class Board {
 		}
 		return out;
 	}
+
+	public void setMatrix() {
+		initMatrix();
+		System.out.println();
+		for (Piece p : pieces) {
+			for(int i=p.y;i<p.y+p.h;i++) {
+				for(int j=p.x;j<p.x+p.w;j++) {
+					matrix[i][j]=1;
+				}
+			}
+		}
+	}
+
+	public void printMatrix() {
+		for(int i=0;i<height;i++) {
+			for(int j=0;j<width;j++) {
+				System.out.print(matrix[i][j] + " ");
+			}
+			System.out.println("\n");
+		}
+	}
+
+	private void initMatrix() {
+		for(int i=0;i<height;i++)
+			for(int j=0;j<width;j++)
+				matrix[i][j]=0;		
+	}
+
+
+	private void setInstance() {
+		Path path = Paths.get("encodings/SlidingBlocks-instance");
+		String instance="";
+		for(int i= 0; i<height;i++) {
+			for(int j= 0; j<width;j++) {
+				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
+			}
+		}
+
+		for (Piece p : pieces) {
+			instance=(instance + new String("blocco("+p.x+", "+p.y+", "+p.w+", "+p.h+").\n"));
+		}
+		
+		
+
+		try {
+			Files.write(path, instance.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
