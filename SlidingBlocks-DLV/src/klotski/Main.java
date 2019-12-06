@@ -10,6 +10,7 @@ import it.unical.mat.embasp.languages.asp.AnswerSets;
 import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
 import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 import klotski.model.Board;
+import klotski.model.Piece;
 import klotski.view.KlotskiApp;
 
 public class Main {
@@ -27,7 +28,7 @@ public class Main {
 		KlotskiApp app = new KlotskiApp(b);
 		// register the class for reflection
 		try {
-			ASPMapper.getInstance().registerClass(Col.class);
+			ASPMapper.getInstance().registerClass(Piece.class);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -40,18 +41,18 @@ public class Main {
 		int n=0;
 		for(AnswerSet a:answers.getAnswersets()){
 			 System.out.println("AS n.: " + ++n + ": " + a);
-			try {
-
-				for(Object obj:a.getAtoms()){
-					if(obj instanceof Col)  {
-						Col col = (Col) obj;
-						System.out.print(col + " ");
-					}
-				}
-				System.out.println();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 			
+//			try {
+//
+//				for(Object obj:a.getAtoms()){
+//					if(obj instanceof Col)  {
+//						Col col = (Col) obj;
+//						System.out.print(col + " ");
+//					}
+//				}
+//				System.out.println();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			} 			
 		}
 		
 		
