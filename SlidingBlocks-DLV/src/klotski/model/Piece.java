@@ -3,7 +3,7 @@ package klotski.model;
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 
-@Id("piece")
+@Id("blocco")
 public class Piece {
 	@Param(0)
 	int x; // the x coordinate of the top left corner of the piece

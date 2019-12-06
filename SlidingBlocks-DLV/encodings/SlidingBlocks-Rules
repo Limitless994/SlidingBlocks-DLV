@@ -1,1 +1,24 @@
-canMoveDown(ID):-blocco(ID, Y, X, W, H),empty(Y,K),K=Y+1.
+%SE HAI UN BLOCCO TIPO 0 1x1
+canMoveDown(ID):-blocco(0,ID, X, Y, W, H),empty(K,Y),K=X+H.
+canMoveUp(ID):-blocco(0,ID, X, Y, W, H),empty(K,Y),K=X-H.
+canMoveLeft(ID):-blocco(0,ID, X, Y, W, H),empty(X,K),K=Y-W.
+canMoveRight(ID):-blocco(0,ID, X, Y, W, H),empty(X,K),K=Y+W.
+
+%SE HAI UN BLOCCO TIPO 1 1x2
+canMoveDown(ID):-blocco(1,ID, X, Y, W, H),empty(K,Y),K=X+H.
+canMoveUp(ID):-blocco(1,ID, X, Y, W, H),empty(K,Y),K=X-1.
+canMoveLeft(ID):-blocco(1,ID, X, Y, W, H),I=Y-1,J=X+1,empty(X,I),empty(J,I).
+canMoveRight(ID):-blocco(1,ID, X, Y, W, H),empty(X,J),empty(I,J),I=X+1,J=Y+1.
+
+%SE HAI UN BLOCCO TIPO 2 2x1
+canMoveLeft(ID):-blocco(2,ID, X, Y, W, H),empty(X,J),J=Y-1.
+canMoveRight(ID):-blocco(2,ID, X, Y, W, H),empty(X,J),J=Y+W.
+canMoveDown(ID):-blocco(2,ID, X, Y, W, H),empty(I,Y),empty(I,J),I=X+1,J=Y+1.
+canMoveUp(ID):-blocco(2,ID, X, Y, W, H),empty(I,Y),empty(I,J),I=X-1,J=Y+1.
+
+%SE HAI UN BLOCCO TIPO 3 2x2
+canMoveLeft(ID):-blocco(3,ID, X, Y, W, H),I=Y-1,J=X+1,empty(X,I),empty(J,I).
+canMoveRight(ID):-blocco(3,ID, X, Y, W, H),empty(X,J),empty(I,J),I=X+1,J=Y+1.
+canMoveDown(ID):-blocco(3,ID, X, Y, W, H),empty(I,Y),empty(I,J),I=X+1,J=Y+1.
+canMoveUp(ID):-blocco(3,ID, X, Y, W, H),empty(I,Y),empty(I,J),I=X-1,J=Y+1.
+

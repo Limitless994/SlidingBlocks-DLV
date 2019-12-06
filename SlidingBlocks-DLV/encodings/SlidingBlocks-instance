@@ -1,12 +1,12 @@
-empty(0,4).
-empty(3,4).
-blocco(0, 1, 0, 2, 2).
-blocco(1, 0, 0, 1, 2).
-blocco(2, 3, 0, 1, 2).
-blocco(3, 0, 2, 1, 2).
-blocco(4, 1, 2, 1, 1).
-blocco(5, 2, 2, 1, 1).
-blocco(6, 3, 2, 1, 2).
-blocco(7, 1, 3, 1, 1).
-blocco(8, 2, 3, 1, 1).
-blocco(9, 1, 4, 2, 1).
+empty(2,3).
+empty(3,2).
+blocco(3, 0, 0, 1, 2, 2).
+blocco(1, 1, 0, 0, 1, 2).
+blocco(1, 2, 0, 3, 1, 2).
+blocco(1, 3, 2, 0, 1, 2).
+blocco(0, 4, 2, 1, 1, 1).
+blocco(0, 5, 2, 2, 1, 1).
+blocco(1, 6, 3, 3, 1, 2).
+blocco(0, 7, 3, 1, 1, 1).
+blocco(0, 8, 4, 2, 1, 1).
+blocco(2, 9, 4, 0, 2, 1).

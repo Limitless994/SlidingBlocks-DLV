@@ -6,8 +6,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.base.Output;
 import it.unical.mat.embasp.languages.asp.ASPInputProgram;
+import it.unical.mat.embasp.languages.asp.AnswerSet;
+import it.unical.mat.embasp.languages.asp.AnswerSets;
+import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
+import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 /**
  * Represents the entire game board, containing several pieces
@@ -331,19 +337,34 @@ public class Board {
 			for(int j=0;j<width;j++)
 				matrix[i][j]=0;		
 	}
-
-
+ //blocco 1x1= tipo 0,1x2=tipo 1,2x1=tipo 2, 2x2= tipo 3
+	private int getBlockType(Piece p) {
+		int out=0;
+		if(p.w==1 && p.h==1) 
+			out= 0;
+		if(p.w==1 && p.h==2) 
+			out= 1;
+		if(p.w==2 && p.h==1) 
+			out= 2;
+		if(p.w==2 && p.h==2) 
+			out= 3;
+		return out;
+		
+	}
 	private void setInstance() {
 		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		String instance="";
 		for(int i= 0; i<height;i++) {
 			for(int j= 0; j<width;j++) {
-				if(matrix[i][j]==0) instance=(instance + new String("empty("+j+","+i+").\n"));
+				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
 			}
 		}
 		int id=0;
+		
+		
 		for (Piece p : pieces) {
-			instance=(instance + new String("blocco("+id+", "+p.x+", "+p.y+", "+p.w+", "+p.h+").\n"));
+			int type=getBlockType(p);
+			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
 			id++;
 		}
 
@@ -351,6 +372,22 @@ public class Board {
 			Files.write(path, instance.getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		//da generalizzare
+		String encodingResource="encodings/SlidingBlocks-Rules";
+		String instanceResource="encodings/SlidingBlocks-instance";
+		Handler handler;
+		handler = new DesktopHandler(new DLVDesktopService("lib/dlv.mingw.exe"));
+		InputProgram  program = new ASPInputProgram();
+		program.addFilesPath(encodingResource);
+		program.addFilesPath(instanceResource);
+		handler.addProgram(program);
+
+		Output o =  handler.startSync();
+		
+		AnswerSets answers = (AnswerSets) o;
+		for(AnswerSet a:answers.getAnswersets()){
+			 System.out.println(a);
 		}
 	}
 
