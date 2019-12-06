@@ -1,0 +1,1 @@
+canMove(X,Y) |canMove(Y,Y) :-blocco(X,Y,_,_).
