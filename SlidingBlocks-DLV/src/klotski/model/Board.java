@@ -1,5 +1,9 @@
 package klotski.model;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -100,7 +104,7 @@ public class Board {
 			pieces[i - 1] = new Piece(Integer.parseInt(tokens[0]),
 					Integer.parseInt(tokens[1]),
 					Integer.parseInt(tokens[2]),
-					Integer.parseInt(tokens[3]));
+					Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
 		}
 		return true;
 	}
@@ -254,49 +258,49 @@ public class Board {
 	public void reset() {
 		pieces = new Piece[10];
 		if (configuration == 1) {
-			pieces[0] = new Piece(1, 0, 2, 2);
-			pieces[1] = new Piece(0, 0, 1, 2);
-			pieces[2] = new Piece(3, 0, 1, 2);
-			pieces[3] = new Piece(0, 2, 1, 2);
-			pieces[4] = new Piece(1, 2, 1, 1);
-			pieces[5] = new Piece(2, 2, 1, 1);
-			pieces[6] = new Piece(3, 2, 1, 2);
-			pieces[7] = new Piece(1, 3, 1, 1);
-			pieces[8] = new Piece(2, 3, 1, 1);
-			pieces[9] = new Piece(1, 4, 2, 1);
+			pieces[0] = new Piece(1, 1, 0, 2, 2);
+			pieces[1] = new Piece(2, 0, 0, 1, 2);
+			pieces[2] = new Piece(3, 3, 0, 1, 2);
+			pieces[3] = new Piece(4, 0, 2, 1, 2);
+			pieces[4] = new Piece(5, 1, 2, 1, 1);
+			pieces[5] = new Piece(6, 2, 2, 1, 1);
+			pieces[6] = new Piece(7, 3, 2, 1, 2);
+			pieces[7] = new Piece(8, 1, 3, 1, 1);
+			pieces[8] = new Piece(9, 2, 3, 1, 1);
+			pieces[9] = new Piece(10, 1, 4, 2, 1);
 		} else if (configuration == 2) {
-			pieces[0] = new Piece(1, 0, 2, 2);
-			pieces[1] = new Piece(0, 0, 1, 1);
-			pieces[2] = new Piece(3, 0, 1, 1);
-			pieces[3] = new Piece(0, 1, 1, 2);
-			pieces[4] = new Piece(3, 1, 1, 2);
-			pieces[5] = new Piece(1, 2, 1, 2);
-			pieces[6] = new Piece(0, 3, 1, 1);
-			pieces[7] = new Piece(3, 3, 1, 1);
-			pieces[8] = new Piece(0, 4, 2, 1);
-			pieces[9] = new Piece(2, 4, 2, 1);
+			pieces[0] = new Piece(1, 1, 0, 2, 2);
+			pieces[1] = new Piece(2, 0, 0, 1, 1);
+			pieces[2] = new Piece(3, 3, 0, 1, 1);
+			pieces[3] = new Piece(4, 0, 1, 1, 2);
+			pieces[4] = new Piece(5, 3, 1, 1, 2);
+			pieces[5] = new Piece(6, 1, 2, 1, 2);
+			pieces[6] = new Piece(7, 0, 3, 1, 1);
+			pieces[7] = new Piece(8, 3, 3, 1, 1);
+			pieces[8] = new Piece(9, 0, 4, 2, 1);
+			pieces[9] = new Piece(10, 2, 4, 2, 1);
 		} else if (configuration == 3) {
-			pieces[0] = new Piece(2, 1, 2, 2);
-			pieces[1] = new Piece(0, 0, 1, 2);
-			pieces[2] = new Piece(1, 0, 1, 1);
-			pieces[3] = new Piece(2, 0, 1, 1);
-			pieces[4] = new Piece(3, 0, 1, 1);
-			pieces[5] = new Piece(1, 1, 1, 2);
-			pieces[6] = new Piece(0, 2, 1, 2);
-			pieces[7] = new Piece(1, 3, 2, 1);
-			pieces[8] = new Piece(3, 3, 1, 1);
-			pieces[9] = new Piece(2, 4, 2, 1);
+			pieces[0] = new Piece(1, 2, 1, 2, 2);
+			pieces[1] = new Piece(2, 0, 0, 1, 2);
+			pieces[2] = new Piece(3, 1, 0, 1, 1);
+			pieces[3] = new Piece(4, 2, 0, 1, 1);
+			pieces[4] = new Piece(5, 3, 0, 1, 1);
+			pieces[5] = new Piece(6, 1, 1, 1, 2);
+			pieces[6] = new Piece(7, 0, 2, 1, 2);
+			pieces[7] = new Piece(8, 1, 3, 2, 1);
+			pieces[8] = new Piece(9, 3, 3, 1, 1);
+			pieces[9] = new Piece(10, 2, 4, 2, 1);
 		} else if (configuration == 4) {
-			pieces[0] = new Piece(1, 0, 2, 2);
-			pieces[1] = new Piece(0, 0, 1, 2);
-			pieces[2] = new Piece(3, 0, 1, 2);
-			pieces[3] = new Piece(0, 2, 1, 2);
-			pieces[4] = new Piece(1, 2, 2, 1);
-			pieces[5] = new Piece(3, 2, 1, 2);
-			pieces[6] = new Piece(1, 3, 1, 1);
-			pieces[7] = new Piece(2, 3, 1, 1);
-			pieces[8] = new Piece(0, 4, 1, 1);
-			pieces[9] = new Piece(3, 4, 1, 1);
+			pieces[0] = new Piece(1, 1, 0, 2, 2);
+			pieces[1] = new Piece(2, 0, 0, 1, 2);
+			pieces[2] = new Piece(3, 3, 0, 1, 2);
+			pieces[3] = new Piece(4, 0, 2, 1, 2);
+			pieces[4] = new Piece(5, 1, 2, 2, 1);
+			pieces[5] = new Piece(6, 3, 2, 1, 2);
+			pieces[6] = new Piece(7, 1, 3, 1, 1);
+			pieces[7] = new Piece(8, 2, 3, 1, 1);
+			pieces[8] = new Piece(9, 0, 4, 1, 1);
+			pieces[9] = new Piece(10, 3, 4, 1, 1);
 		}
 
 		moves = 0;
@@ -346,8 +350,8 @@ public class Board {
 			for(int j=0;j<width;j++)
 				matrix[i][j]=0;		
 	}
- //blocco 1x1= tipo 0,1x2=tipo 1,2x1=tipo 2, 2x2= tipo 3
-	private int getBlockType(Piece p) {
+	//blocco 1x1= tipo 0,1x2=tipo 1,2x1=tipo 2, 2x2= tipo 3
+	public static int getBlockType(Piece p) {
 		int out=0;
 		if(p.w==1 && p.h==1) 
 			out= 0;
@@ -358,7 +362,7 @@ public class Board {
 		if(p.w==2 && p.h==2) 
 			out= 3;
 		return out;
-		
+
 	}
 	private void setInstance() {
 		Path path = Paths.get("encodings/SlidingBlocks-instance");
@@ -369,8 +373,8 @@ public class Board {
 			}
 		}
 		int id=0;
-		
-		
+
+
 		for (Piece p : pieces) {
 			int type=getBlockType(p);
 			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
@@ -388,7 +392,7 @@ public class Board {
 		program.addFilesPath(instanceResource);
 		handler.addProgram(program);
 		Output o =  handler.startSync();
-		
+
 		AnswerSets answers = (AnswerSets) o;
 		for(AnswerSet a:answers.getAnswersets()){
 			//if(a.toString()=="canMove")
@@ -423,6 +427,44 @@ public class Board {
 		for(Pair<String,String> pair: Nodi) {
 			System.out.println("Pair " + pair.getKey()+ pair.getValue());
 		}
+		solve();
 	}
 
+	public void moveById(String s) {
+		int id=0;
+		int direction = 0;
+		if(s.contains("canMoveUp")) direction=0;
+		else if(s.contains("canMoveRight")) direction=1;
+		else if(s.contains("canMoveDown")) direction=2;
+		else if(s.contains("canMoveLeft")) direction=3;
+		s = s.replaceAll("\\D+",""); // rimuove tutti icaratteri
+		id=Integer.parseInt(s);
+		for(Piece p: pieces) {
+			if(p.getId()==id) {
+				p.move(direction);
+			}
+		}
+	}
+	public void solve() {
+		File file = new File("encodings\\Sliding-blocks-Next-Step"); 
+
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
+		String st;
+		try {
+			while ((st = br.readLine()) != null) {
+			System.out.println("Invocata su "+st);
+				//moveById(st);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

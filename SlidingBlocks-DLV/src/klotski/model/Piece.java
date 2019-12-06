@@ -6,14 +6,16 @@ import it.unical.mat.embasp.languages.Param;
 @Id("blocco")
 public class Piece {
 	@Param(0)
-	int x; // the x coordinate of the top left corner of the piece
+	int id;
 	@Param(1)
-	int y; // the y coordinate of the top left corner of the piece
+	int x; // the x coordinate of the top left corner of the piece
 	@Param(2)
-	int w; // the horizontal width of the piece
+	int y; // the y coordinate of the top left corner of the piece
 	@Param(3)
+	int w; // the horizontal width of the piece
+	@Param(4)
 	int h; // the vertical height of the piece
-	
+
 	/**
 	 * Basic constructor for initializing a piece
 	 * @param x the x coordinate of the top left corner of the piece
@@ -21,13 +23,15 @@ public class Piece {
 	 * @param w the horizontal width of the piece
 	 * @param h the vertical height of the piece
 	 */
-	public Piece(int x, int y, int w, int h) {
+	public Piece(int id,int x, int y, int w, int h) {
 		if (x < 0 || y < 0 || w < 1 || h < 1)
 			throw new IllegalArgumentException("Piece values must be positive");
 		this.x = x;
 		this.y = y;
 		this.w = w;
 		this.h= h;
+		this.id=id;
+		
 	}
 
 	/**
@@ -79,5 +83,12 @@ public class Piece {
 				.concat(Integer.toString(w) + " ")
 				.concat(Integer.toString(h));
 		return out;
+	}
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
