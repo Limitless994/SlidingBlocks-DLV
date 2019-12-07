@@ -246,7 +246,7 @@ public class Board {
 		++moves;
 		setMatrix();
 		setInstance();
-		printMatrix();
+		//printMatrix();
 
 		return true;
 	}
@@ -421,16 +421,32 @@ public class Board {
 
 		}
 		for(String t:listaMosse) {
-			Pair<String,String> current=new Pair(t+".\n",instance);
+			
+			Pair<String,String> current=new Pair(t+".\n",instance); //server per sotto
 			Nodi.add(current);
+			
 		}
 		for(Pair<String,String> pair: Nodi) {
-			System.out.println("Pair " + pair.getKey()+ pair.getValue());
+			System.out.println(pair.getKey()+ pair.getValue()); //lista accoppiata di MossaPossibile da compiere ed Istanza su cui è possibile applicarla.
 		}
-		solve();
+		//solve();
 	}
 
-	public void moveById(String s) {
+	public String getNextMatrix(String mossa, String instance) {
+		//Va implementato questo metodo. Ritorna l'istanza dopo averle applicato la mossa.
+		int id=Integer.parseInt(mossa.replaceAll("\\D+","")); //
+		
+		return null;
+	}
+	
+	public void moveById(String s){ //Ci serve quando avremo la lista di mosse per la vittoria,ora è inutile.
+		Board out = null;
+		try {
+			out = (Board)this.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int id=0;
 		int direction = 0;
 		if(s.contains("canMoveUp")) direction=0;
@@ -439,32 +455,10 @@ public class Board {
 		else if(s.contains("canMoveLeft")) direction=3;
 		s = s.replaceAll("\\D+",""); // rimuove tutti icaratteri
 		id=Integer.parseInt(s);
-		for(Piece p: pieces) {
+		for(Piece p: out.pieces) {
 			if(p.getId()==id) {
 				p.move(direction);
 			}
-		}
-	}
-	public void solve() {
-		File file = new File("encodings\\Sliding-blocks-Next-Step"); 
-
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-
-		String st;
-		try {
-			while ((st = br.readLine()) != null) {
-			System.out.println("Invocata su "+st);
-				//moveById(st);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }
