@@ -246,7 +246,7 @@ public class Board {
 		++moves;
 		setMatrix();
 		setInstance();
-		//printMatrix();
+		printMatrix();
 
 		return true;
 	}

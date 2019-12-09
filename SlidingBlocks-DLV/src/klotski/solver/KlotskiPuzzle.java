@@ -13,8 +13,8 @@ import java.util.Stack;
 public class KlotskiPuzzle {
 	static final String EMPTY = "0";		//an empty space in the grid
 	static final String SOLVED_CHAR = "J";	//Block name that meets victory condition
-	static final int GRID_WIDTH = 5;
-	static final int GRID_HEIGHT = 4;
+	static final int GRID_COLUMN = 5;
+	static final int GRID_ROW = 4;
 	static final String[] BLOCK_NAMES = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 	
 	static final String DEFAULT_CONFIG = "AJJCAJJCBEEDBGHDF00I";	//116 moves to win
@@ -22,7 +22,7 @@ public class KlotskiPuzzle {
 	//static final String DEFAULT_CONFIG = "0B0CABDCAHDFJJEEJJIG";	//9 moves to win
 //	static final String DEFAULT_CONFIG = "0AB0DABCDJJCIJJFHEEG";	//25 moves to win
 	
-	String[][] grid = new String[GRID_WIDTH][GRID_HEIGHT];
+	String[][] grid = new String[GRID_COLUMN][GRID_ROW];
 	Map<String, Block> blocks = new Hashtable<String, Block>();
 	
 	//Track grid configurations of each move
@@ -74,9 +74,9 @@ public class KlotskiPuzzle {
 	public void printPuzzle(){
 		System.out.println("    0 1 2 3 4 ");
 		System.out.println("   -----------");
-		for(int j=0; j<GRID_HEIGHT;j++){
+		for(int j=0; j<GRID_ROW;j++){
 			System.out.print(j + " | ");
-			for(int i=0; i<GRID_WIDTH;i++){
+			for(int i=0; i<GRID_COLUMN;i++){
 				System.out.print(grid[i][j] + " ");
 			}
 			if(j==1 || j==2) System.out.print("+");
@@ -87,16 +87,16 @@ public class KlotskiPuzzle {
 	}
 	
 	public String getGrid(int x, int y){
-		if(x < 0 || x >= GRID_WIDTH) return "";
-		if(y < 0 || y >= GRID_HEIGHT) return "";
+		if(x < 0 || x >= GRID_COLUMN) return "";
+		if(y < 0 || y >= GRID_ROW) return "";
 		return grid[x][y];
 	}
 	
 	//TODO make more efficient, use Huffman encoding
 	public String getGridCode(){
 		String code = "";
-		for(int i=0;i<GRID_WIDTH;i++){
-			for(int j=0;j<GRID_HEIGHT;j++){
+		for(int i=0;i<GRID_COLUMN;i++){
+			for(int j=0;j<GRID_ROW;j++){
 				code += grid[i][j];
 			}
 		}
@@ -122,9 +122,9 @@ public class KlotskiPuzzle {
 	
 	public void codeToGrid(String code){
 		int s = 0;
-		int max = GRID_WIDTH * GRID_HEIGHT;
-		for(int i=0;i<GRID_WIDTH;i++){
-			for(int j=0;j<GRID_HEIGHT;j++){
+		int max = GRID_COLUMN * GRID_ROW;
+		for(int i=0;i<GRID_COLUMN;i++){
+			for(int j=0;j<GRID_ROW;j++){
 				if(s>code.length() || s>=max) break;
 				grid[i][j] = Character.toString(code.charAt(s));
 				s++;
@@ -167,20 +167,20 @@ public class KlotskiPuzzle {
 	private Boolean isCollision(int x, int y, Block b){
 		if(grid[x][y].equals(EMPTY) || grid[x][y].equals(b.name)){
 			//check for width collision
-			for(int i=1;i<b.width;i++){
+			for(int i=1;i<b.colonna;i++){
 				if(!grid[x+i][y].equals(EMPTY) && !grid[x+i][y].equals(b.name)){
 					return true;
 				}
 			}
 			//check for height collision
-			for(int i=1;i<b.height;i++){
+			for(int i=1;i<b.riga;i++){
 				if(!grid[x][y+i].equals(EMPTY) && !grid[x][y+i].equals(b.name)){
 					return true;
 				}
 			}
 			//check for inner
-			for(int i=1;i<b.width;i++){
-				for(int j=1;j<b.height;j++){
+			for(int i=1;i<b.colonna;i++){
+				for(int j=1;j<b.riga;j++){
 					if(!grid[x+i][y+j].equals(EMPTY) && !grid[x+i][y+j].equals(b.name)){
 						return true;
 					}
@@ -193,7 +193,7 @@ public class KlotskiPuzzle {
 	
 	private Boolean isValidMove(int x, int y, Block b){
 		Move c = getBlockPos(b);
-		if(x+(b.width-1) >= GRID_WIDTH || y+(b.height-1) >= GRID_HEIGHT) return false;
+		if(x+(b.colonna-1) >= GRID_COLUMN || y+(b.riga-1) >= GRID_ROW) return false;
 		if(isCollision(x,y,b)) return false;
 		if(x != c.x && y != c.y) return false;
 		if(Math.abs(x-c.x) > 1 || Math.abs(y-c.y) > 1) return false;
@@ -204,8 +204,8 @@ public class KlotskiPuzzle {
 	public Move getBlockPos(Block b){
 		if(b != null && blocks.containsKey(b.name)){
 			Move c = new Move(0,0,b);
-			for(int i=0;i<GRID_WIDTH;i++){
-				for(int j=0;j<GRID_HEIGHT;j++){
+			for(int i=0;i<GRID_COLUMN;i++){
+				for(int j=0;j<GRID_ROW;j++){
 					if(grid[i][j].equals(b.name)){
 						c.x = i;
 						c.y = j;
@@ -221,8 +221,8 @@ public class KlotskiPuzzle {
 	 * Replaces Block B1 with B2
 	 */
 	private void replaceBlock(String b1, String b2){
-		for(int i=0;i<GRID_WIDTH;i++){
-			for(int j=0;j<GRID_HEIGHT;j++){
+		for(int i=0;i<GRID_COLUMN;i++){
+			for(int j=0;j<GRID_ROW;j++){
 				if(grid[i][j].equals(b1)){
 					grid[i][j] = b2;
 				}
@@ -231,8 +231,8 @@ public class KlotskiPuzzle {
 	}
 	
 	private void insertBlock(int x, int y, Block b){
-		for(int i=x;i<x+b.width;i++){
-			for(int j=y;j<y+b.height;j++){
+		for(int i=x;i<x+b.colonna;i++){
+			for(int j=y;j<y+b.riga;j++){
 				grid[i][j] = b.name;
 			}
 		}

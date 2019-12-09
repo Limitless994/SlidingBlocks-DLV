@@ -89,8 +89,8 @@ public class KlotskiSolver {
 		KlotskiPuzzle p = new KlotskiPuzzle(gridCode);
 		
 		//Iterate through each column
-		for(int i=0; i<KlotskiPuzzle.GRID_WIDTH;i++){
-			for(int j=0;j<KlotskiPuzzle.GRID_HEIGHT;j++){
+		for(int i=0; i<KlotskiPuzzle.GRID_COLUMN;i++){
+			for(int j=0;j<KlotskiPuzzle.GRID_ROW;j++){
 				if(p.getGrid(i,j).equals(KlotskiPuzzle.EMPTY)){
 					String moveBlock = "";
 					Move blockPos = null;
