@@ -22,3 +22,16 @@ canMoveRight(ID):-blocco(3,ID, X, Y, W, H),empty(X,J),empty(I,J),I=X+1,J=Y+1.
 canMoveDown(ID):-blocco(3,ID, X, Y, W, H),empty(I,Y),empty(I,J),I=X+1,J=Y+1.
 canMoveUp(ID):-blocco(3,ID, X, Y, W, H),empty(I,Y),empty(I,J),I=X-1,J=Y+1.
 
+%SE è POSSIBILE MUOVERE IL BLOCCO 0 VA MOSSO.
+:~muovo(X),X<>0.[1:10]
+%PAGO PER OGNI BLOCCO DI DISTANZA DAL BLOCCO DELLA VITTORIA
+distanceFromWin(T):-winPosition(P,L),blocco(_, X, Y, 1, 2, 2),I=P-X,J=L-Y,T=I+J.
+:~distanceFromWin(T).[T:9]
+%PAGO PER OGNI BLOCCO CHE SI TROVA TRA IL BLOCCO DELLA VITTORIA ED IL BLOCCO DA FAR USCIRE
+%distanceFromWin(T):-winPosition(P,L),blocco(3, X, Y, 1, 2, 2),I=P-X,J=L-Y,T=I+J.
+muovo(X)|nonMuovo(X):-canMoveLeft(X).
+muovo(X)|nonMuovo(X):-canMoveRight(X).
+muovo(X)|nonMuovo(X):-canMoveDown(X).
+muovo(X)|nonMuovo(X):-canMoveUp(X).
+:-#count{X:muovo(X)}>1.
+:-#count{X:muovo(X)}<1.

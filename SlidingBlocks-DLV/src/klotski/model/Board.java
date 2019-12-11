@@ -11,6 +11,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
+
 import javafx.util.Pair;
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
@@ -246,7 +248,7 @@ public class Board {
 		++moves;
 		setMatrix();
 		setInstance();
-		printMatrix();
+//		printMatrix();
 
 		return true;
 	}
@@ -380,7 +382,8 @@ public class Board {
 			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
 			id++;
 		}
-
+				instance=(instance+ new String("winPosition(4,1).\n"));
+				instance=(instance+ new String("winPosition(4,2)."));
 		try {
 			Files.write(path, instance.getBytes());
 		} catch (IOException e) {
@@ -395,8 +398,6 @@ public class Board {
 
 		AnswerSets answers = (AnswerSets) o;
 		for(AnswerSet a:answers.getAnswersets()){
-			//if(a.toString()=="canMove")
-			//System.out.println("AS n.: " + ++n + ": " + a);
 			String s2 = a.toString();
 			String nextInstance="";
 			StringTokenizer st = new StringTokenizer(s2);
@@ -421,32 +422,29 @@ public class Board {
 
 		}
 		for(String t:listaMosse) {
-			
+
 			Pair<String,String> current=new Pair(t+".\n",instance); //server per sotto
 			Nodi.add(current);
-			
+
 		}
 		for(Pair<String,String> pair: Nodi) {
 			System.out.println(pair.getKey()+ pair.getValue()); //lista accoppiata di MossaPossibile da compiere ed Istanza su cui è possibile applicarla.
+
+			moveById(pair.getKey());
+			
+			break;
 		}
-		//solve();
+		
 	}
 
 	public String getNextMatrix(String mossa, String instance) {
 		//Va implementato questo metodo. Ritorna l'istanza dopo averle applicato la mossa.
 		int id=Integer.parseInt(mossa.replaceAll("\\D+","")); //
-		
+
 		return null;
 	}
-	
+
 	public void moveById(String s){ //Ci serve quando avremo la lista di mosse per la vittoria,ora è inutile.
-		Board out = null;
-		try {
-			out = (Board)this.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		int id=0;
 		int direction = 0;
 		if(s.contains("canMoveUp")) direction=0;
@@ -455,10 +453,11 @@ public class Board {
 		else if(s.contains("canMoveLeft")) direction=3;
 		s = s.replaceAll("\\D+",""); // rimuove tutti icaratteri
 		id=Integer.parseInt(s);
-		for(Piece p: out.pieces) {
-			if(p.getId()==id) {
-				p.move(direction);
-			}
+		id++;//fattore di conversione da id di dlv ad id di matrice
+		for(Piece p: this.pieces) {
+			if(p.getId()==id)p.move(direction);
+			
 		}
 	}
+	
 }
