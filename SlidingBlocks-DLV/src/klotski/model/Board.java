@@ -25,9 +25,13 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-	public String encodingResource="encodings/SlidingBlocks-Rules";
-	public String instanceResource="encodings/SlidingBlocks-instance";
-	public Handler handler = new DesktopHandler(new DLVDesktopService("lib\\dlv2.win.x64_4"));
+//	public String encodingResource="encodings/SlidingBlocks-Rules";
+//	public String instanceResource="encodings/SlidingBlocks-instance";
+	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
+	
+//	public Handler handler = new DesktopHandler(new DLVDesktopService("dlv2.win.x64_4"));
+	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
 	List<String> listaMosse = new ArrayList<String>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
@@ -362,7 +366,8 @@ public class Board {
 
 	}
 	private void setInstance() {
-		Path path = Paths.get("encodings/SlidingBlocks-instance");
+//		Path path = Paths.get("encodings/SlidingBlocks-instance");
+		Path path = Paths.get("SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
 		String instance="";
 		for(int i= 0; i<height;i++) {
 			for(int j= 0; j<width;j++) {
