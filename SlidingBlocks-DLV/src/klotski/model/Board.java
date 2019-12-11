@@ -398,12 +398,16 @@ public class Board {
 			String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
 			if(temp.contains("move")) {
 				temp = temp.replace(","," ");
+				temp = temp.replace("}"," ");
+				temp = temp.replace("{"," ");
 				listaMosse.add(temp);
 				System.out.println(temp);
 				instance=(instance + temp);
 			}
 		}
-
+		handler.removeProgram(program);
+		handler.removeAll();
+		//moveById(listaMosse.get(0));
 	}
 
 	public String getNextMatrix(String mossa, String instance) {
@@ -416,10 +420,12 @@ public class Board {
 	public void moveById(String s){ //Ci serve quando avremo la lista di mosse per la vittoria,ora è inutile.
 		int id=0;
 		int direction = 0;
-		
 		s = s.replaceAll("\\D+",""); // rimuove tutti icaratteri
 		id=Integer.parseInt(s);
-		id++;//fattore di conversione da id di dlv ad id di matrice
+		id/=10;
+		direction=Integer.parseInt(s);
+		direction-=id*10;
+		id++;
 		for(Piece p: this.pieces) {
 			if(p.getId()==id)p.move(direction);
 
