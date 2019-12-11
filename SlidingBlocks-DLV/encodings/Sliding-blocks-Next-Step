@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-canMoveDown(1).
-canMoveDown(7).
-canMoveLeft(4).
-=======
-canMoveDown(3).
-canMoveDown(7).
->>>>>>> branch 'master' of https://github.com/Limitless994/SlidingBlocks-DLV
-canMoveLeft(9).

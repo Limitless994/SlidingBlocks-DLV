@@ -25,9 +25,9 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
-	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv.mingw.exe"));
+	public String encodingResource="encodings/SlidingBlocks-Rules";
+	public String instanceResource="encodings/SlidingBlocks-instance";
+	public Handler handler = new DesktopHandler(new DLVDesktopService("lib\\dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
 	List<String> listaMosse = new ArrayList<String>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
@@ -243,7 +243,7 @@ public class Board {
 		++moves;
 		setMatrix();
 		setInstance();
-//		printMatrix();
+		//		printMatrix();
 
 		return true;
 	}
@@ -362,7 +362,7 @@ public class Board {
 
 	}
 	private void setInstance() {
-		Path path = Paths.get("SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
+		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		String instance="";
 		for(int i= 0; i<height;i++) {
 			for(int j= 0; j<width;j++) {
@@ -377,8 +377,8 @@ public class Board {
 			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
 			id++;
 		}
-				instance=(instance+ new String("winPosition(4,1).\n"));
-				instance=(instance+ new String("winPosition(4,2)."));
+		instance=(instance+ new String("winPosition(4,1).\n"));
+		instance=(instance+ new String("winPosition(4,2)."));
 		try {
 			Files.write(path, instance.getBytes());
 		} catch (IOException e) {
@@ -392,44 +392,18 @@ public class Board {
 		Output o =  handler.startSync();
 
 		AnswerSets answers = (AnswerSets) o;
-		for(AnswerSet a:answers.getAnswersets()){
-			String s2 = a.toString();
-			String nextInstance="";
-			StringTokenizer st = new StringTokenizer(s2);
-			while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
-				String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
-
-				if(temp.contains("canMoveDown")||temp.contains("canMoveRight")||temp.toString().contains("canMoveUP")||temp.toString().contains("canMoveLeft")) {
-					temp = temp.replace(temp.substring(temp.length()-1), "");
-					listaMosse.add(temp);
-					nextInstance=(nextInstance +temp+".\n");
-				}
-				Path path2 = Paths.get("SlidingBlocks-DLV/encodings\\Sliding-blocks-Next-Step");
-
-				try {
-					Files.write(path2, nextInstance.getBytes());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+		String s2 = answers.getAnswerSetsString();
+		StringTokenizer st = new StringTokenizer(s2);
+		while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
+			String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
+			if(temp.contains("move")) {
+				temp = temp.replace(","," ");
+				listaMosse.add(temp);
+				System.out.println(temp);
+				instance=(instance + temp);
 			}
-
 		}
-		for(String t:listaMosse) {
 
-			Pair<String,String> current=new Pair(t+".\n",instance); //server per sotto
-			Nodi.add(current);
-
-		}
-		for(Pair<String,String> pair: Nodi) {
-			System.out.println(pair.getKey()+ pair.getValue()); //lista accoppiata di MossaPossibile da compiere ed Istanza su cui è possibile applicarla.
-
-			moveById(pair.getKey());
-			
-			break;
-		}
-		
 	}
 
 	public String getNextMatrix(String mossa, String instance) {
@@ -442,17 +416,14 @@ public class Board {
 	public void moveById(String s){ //Ci serve quando avremo la lista di mosse per la vittoria,ora è inutile.
 		int id=0;
 		int direction = 0;
-		if(s.contains("canMoveUp")) direction=0;
-		else if(s.contains("canMoveRight")) direction=1;
-		else if(s.contains("canMoveDown")) direction=2;
-		else if(s.contains("canMoveLeft")) direction=3;
+		
 		s = s.replaceAll("\\D+",""); // rimuove tutti icaratteri
 		id=Integer.parseInt(s);
 		id++;//fattore di conversione da id di dlv ad id di matrice
 		for(Piece p: this.pieces) {
 			if(p.getId()==id)p.move(direction);
-			
+
 		}
 	}
-	
+
 }
