@@ -3,12 +3,6 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 
-/**
- * @author Alex Salerno
- * @author Chris Parsoneault
- * @version 0.1
- *
- */
 
 public class KlotskiPuzzle {
 	static final String EMPTY = "0";		//an empty space in the grid
