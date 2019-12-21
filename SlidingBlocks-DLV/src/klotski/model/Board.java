@@ -367,7 +367,6 @@ public class Board {
 
 	}
 	private void setInstance() {
-<<<<<<< HEAD
 		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		//String instance="";
 //		for(int i= 0; i<height;i++) {
@@ -376,17 +375,6 @@ public class Board {
 //			}
 //		}
 //		int id=0;
-=======
-//		Path path = Paths.get("encodings/SlidingBlocks-instance");
-		Path path = Paths.get("SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
-		String instance="";
-		for(int i= 0; i<height;i++) {
-			for(int j= 0; j<width;j++) {
-				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
-			}
-		}
-		int id=0;
->>>>>>> branch 'master' of https://github.com/Limitless994/SlidingBlocks-DLV
 
 
 //		for (Piece p : pieces) {
