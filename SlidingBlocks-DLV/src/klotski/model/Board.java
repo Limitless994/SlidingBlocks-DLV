@@ -363,27 +363,27 @@ public class Board {
 	}
 	private void setInstance() {
 		Path path = Paths.get("encodings/SlidingBlocks-instance");
-		String instance="";
-		for(int i= 0; i<height;i++) {
-			for(int j= 0; j<width;j++) {
-				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
-			}
-		}
-		int id=0;
+		//String instance="";
+//		for(int i= 0; i<height;i++) {
+//			for(int j= 0; j<width;j++) {
+//				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
+//			}
+//		}
+//		int id=0;
 
 
-		for (Piece p : pieces) {
-			int type=getBlockType(p);
-			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
-			id++;
-		}
-		instance=(instance+ new String("winPosition(4,1).\n"));
-		instance=(instance+ new String("winPosition(4,2)."));
-		try {
-			Files.write(path, instance.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		for (Piece p : pieces) {
+//			int type=getBlockType(p);
+//			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
+//			id++;
+//		}
+//		instance=(instance+ new String("winPosition(4,1).\n"));
+//		instance=(instance+ new String("winPosition(4,2)."));
+//		try {
+//			Files.write(path, instance.getBytes());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		//da generalizzare
 
 		program.addFilesPath(encodingResource);
@@ -392,17 +392,15 @@ public class Board {
 		Output o =  handler.startSync();
 
 		AnswerSets answers = (AnswerSets) o;
-		String s2 = answers.getAnswerSetsString();
+		String s2 = answers.getAnswersets().get(0).toString();
 		StringTokenizer st = new StringTokenizer(s2);
 		while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
 			String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
-			if(temp.contains("move")) {
+			if(temp.contains("muovoGiu") ||temp.contains("muovoSu") ||temp.contains("muovoDestra")||temp.contains("muovoSinistra")) {
 				temp = temp.replace(","," ");
 				temp = temp.replace("}"," ");
 				temp = temp.replace("{"," ");
-				listaMosse.add(temp);
 				System.out.println(temp);
-				instance=(instance + temp);
 			}
 		}
 		handler.removeProgram(program);
