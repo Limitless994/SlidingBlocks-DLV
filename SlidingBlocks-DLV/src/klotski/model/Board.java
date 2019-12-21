@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
@@ -25,15 +26,15 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-//	public String encodingResource="encodings/SlidingBlocks-Rules";
-//	public String instanceResource="encodings/SlidingBlocks-instance";
+	//	public String encodingResource="encodings/SlidingBlocks-Rules";
+	//	public String instanceResource="encodings/SlidingBlocks-instance";
 	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
 	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
-	
-//	public Handler handler = new DesktopHandler(new DLVDesktopService("dlv2.win.x64_4"));
+
+	//	public Handler handler = new DesktopHandler(new DLVDesktopService("dlv2.win.x64_4"));
 	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
-	List<String> listaMosse = new ArrayList<String>();
+	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
 	Piece[] pieces;
 	Piece selected;
@@ -43,6 +44,8 @@ public class Board {
 	int configuration;
 	boolean hasWon;
 	int [][]matrix;
+
+
 	/**
 	 * Basic constructor. Initializes height and width to standard klotski size.
 	 * Initializes pieces to configuration 1
@@ -108,7 +111,7 @@ public class Board {
 					Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
 		}
 		return true;
-		
+
 	}
 
 	/**
@@ -369,26 +372,26 @@ public class Board {
 	private void setInstance() {
 		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		//String instance="";
-//		for(int i= 0; i<height;i++) {
-//			for(int j= 0; j<width;j++) {
-//				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
-//			}
-//		}
-//		int id=0;
+		//		for(int i= 0; i<height;i++) {
+		//			for(int j= 0; j<width;j++) {
+		//				if(matrix[i][j]==0) instance=(instance + new String("empty("+i+","+j+").\n"));
+		//			}
+		//		}
+		//		int id=0;
 
 
-//		for (Piece p : pieces) {
-//			int type=getBlockType(p);
-//			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
-//			id++;
-//		}
-//		instance=(instance+ new String("winPosition(4,1).\n"));
-//		instance=(instance+ new String("winPosition(4,2)."));
-//		try {
-//			Files.write(path, instance.getBytes());
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		//		for (Piece p : pieces) {
+		//			int type=getBlockType(p);
+		//			instance=(instance + new String("blocco("+type+", "+id+", "+p.y+", "+p.x+", "+p.w+", "+p.h+").\n"));
+		//			id++;
+		//		}
+		//		instance=(instance+ new String("winPosition(4,1).\n"));
+		//		instance=(instance+ new String("winPosition(4,2)."));
+		//		try {
+		//			Files.write(path, instance.getBytes());
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
 		//da generalizzare
 
 		program.addFilesPath(encodingResource);
@@ -402,15 +405,41 @@ public class Board {
 		while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
 			String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
 			if(temp.contains("muovoGiu") ||temp.contains("muovoSu") ||temp.contains("muovoDestra")||temp.contains("muovoSinistra")) {
-				temp = temp.replace(","," ");
-				temp = temp.replace("}"," ");
-				temp = temp.replace("{"," ");
-				System.out.println(temp);
+				fillAnswerList(temp);
+//				System.out.println(temp);
+
+
 			}
 		}
 		handler.removeProgram(program);
 		handler.removeAll();
 		//moveById(listaMosse.get(0));
+	}
+	public void fillAnswerList(String temp) {
+		temp = temp.replace(","," ");
+		temp = temp.replace("}"," ");
+		temp = temp.replace("{"," ");
+		temp = temp.replace("muovoSinistra","S");
+		temp = temp.replace("muovoDestra","D");
+		temp = temp.replace("muovoSu","U");
+		temp = temp.replace("muovoGiu","D");
+		int contblank =0;
+		for(int i =0;i<temp.length();i++) {
+			if(contblank ==2) {
+				contblank=0;
+				String a =String.valueOf(temp.charAt(0));
+				String b = String.valueOf(temp.charAt(i));
+				Pair<String, Integer> pair = new Pair<>(a, Integer.parseInt(b));
+				moveSequence.add(pair);		
+				System.out.println(pair.getKey()+pair.getValue());
+				break;
+			}
+
+			if(temp.charAt(i)==' ') {
+				contblank++;
+			}
+
+		}
 	}
 
 	public String getNextMatrix(String mossa, String instance) {
