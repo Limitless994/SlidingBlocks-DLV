@@ -103,7 +103,6 @@ public class Board {
 					Integer.parseInt(tokens[2]),
 					Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
 		}
-		
 		return true;
 		
 	}
