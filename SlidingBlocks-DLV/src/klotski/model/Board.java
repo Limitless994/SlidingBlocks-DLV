@@ -251,7 +251,6 @@ public class Board {
 		selected.move(direction);
 		++moves;
 		setMatrix();
-		setInstance();
 		//		printMatrix();
 
 		return true;
