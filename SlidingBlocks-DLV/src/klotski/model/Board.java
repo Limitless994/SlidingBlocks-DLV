@@ -59,8 +59,8 @@ public class Board {
 		// selectedPiece to null, and set hasWon to false
 		reset();
 
-		this.height = 5;
-		this.width = 4;
+		this.height = 3;
+		this.width = 3;
 		matrix=new int[height][width];
 		initMatrix();
 		setMatrix();
@@ -262,18 +262,18 @@ public class Board {
 	 * sets moves to 0, sets selectedPiece to null, and sets hasWon to false
 	 */
 	public void reset() {
-		pieces = new Piece[10];
+		pieces = new Piece[6];
 		if (configuration == 1) {
-			pieces[0] = new Piece(1, 1, 0, 2, 2);
-			pieces[1] = new Piece(2, 0, 0, 1, 2);
-			pieces[2] = new Piece(3, 3, 0, 1, 2);
-			pieces[3] = new Piece(4, 0, 2, 1, 2);
-			pieces[4] = new Piece(5, 1, 2, 1, 1);
-			pieces[5] = new Piece(6, 2, 2, 1, 1);
-			pieces[6] = new Piece(7, 3, 2, 1, 2);
-			pieces[7] = new Piece(8, 1, 3, 1, 1);
-			pieces[8] = new Piece(9, 2, 3, 1, 1);
-			pieces[9] = new Piece(10, 1, 4, 2, 1);
+			pieces[0] = new Piece(0, 1, 0, 2, 1);
+			pieces[1] = new Piece(1, 0, 0, 1, 1);
+			pieces[2] = new Piece(2, 1, 1, 1, 1);
+			pieces[3] = new Piece(3, 2, 2, 1, 1);
+			pieces[4] = new Piece(4, 1, 2, 1, 1);
+			pieces[5] = new Piece(5, 2, 1, 1, 1);
+//			pieces[6] = new Piece(7, 3, 2, 1, 2);
+//			pieces[7] = new Piece(8, 1, 3, 1, 1);
+//			pieces[8] = new Piece(9, 2, 3, 1, 1);
+//			pieces[9] = new Piece(10, 1, 4, 2, 1);
 		} else if (configuration == 2) {
 			pieces[0] = new Piece(1, 1, 0, 2, 2);
 			pieces[1] = new Piece(2, 0, 0, 1, 1);
@@ -354,7 +354,7 @@ public class Board {
 	private void initMatrix() {
 		for(int i=0;i<height;i++)
 			for(int j=0;j<width;j++)
-				matrix[i][j]=0;		
+				matrix[i][j]=9;		
 	}
 	//blocco 1x1= tipo 0,1x2=tipo 1,2x1=tipo 2, 2x2= tipo 3
 	public static int getBlockType(Piece p) {
@@ -400,18 +400,15 @@ public class Board {
 		program.addFilesPath(instanceResource);
 		handler.addProgram(program);
 		Output o =  handler.startSync();
-
 		AnswerSets answers = (AnswerSets) o;
 		try{
 			String s2 = answers.getAnswersets().get(0).toString();
 			StringTokenizer st = new StringTokenizer(s2);
-			while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
-				String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
+			while (st.hasMoreTokens()) { 
+				String temp=st.nextToken();
 				if(temp.contains("muovoGiu") ||temp.contains("muovoSu") ||temp.contains("muovoDestra")||temp.contains("muovoSinistra")) {
 					fillAnswerList(temp);
 					//				System.out.println(temp);
-
-
 				}
 			}
 		}catch(Exception e){
@@ -440,18 +437,15 @@ public class Board {
 				System.out.println(pair.getKey()+pair.getValue());
 				break;
 			}
-
 			if(temp.charAt(i)==' ') {
 				contblank++;
 			}
-
 		}
 	}
 
 	public String getNextMatrix(String mossa, String instance) {
 		//Va implementato questo metodo. Ritorna l'istanza dopo averle applicato la mossa.
 		int id=Integer.parseInt(mossa.replaceAll("\\D+","")); //
-
 		return null;
 	}
 
@@ -466,8 +460,6 @@ public class Board {
 		id++;
 		for(Piece p: this.pieces) {
 			if(p.getId()==id)p.move(direction);
-
 		}
 	}
-
 }
