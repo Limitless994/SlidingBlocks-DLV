@@ -1,4 +1,3 @@
-
 %ATTENZIONE LA MATRICE è SEGNATA COL METODO INGLESE, 
 %LA PRIMA COORDINATA è LA COLONNA, SE SCRIVO (0,1)
 %VOGLIO INDICARE LA RIGA NUMERO 2 E LA COLONNA 1
@@ -80,13 +79,6 @@ blocco(Tipo,TN,ID,X,Y):-nonMuovo(Tipo,T,ID,X,Y),TN=T+1.
 %Incremento le mosse.
 contMosse(C):-contMosse(K),C=K+1,numMaxMosse(A),K<A.
 
-%condizioni vittoria, ATTUALMENTE FUNZIONA SOLO CON X Y ( SAREBBERO LE COORD DEL SOTTO-BLOCCO IN ALTO A SIN)
-%PER I BLOCCHI DI TIPO 1,2 E 3 DEVE FUNZIONARE IN MANIERA DIVERSA, VA RIVISTA QUESTA PARTE
-%CHIEDI DISEGNO A DAVIDE IN CASO DI INCOMPRENSIONI
-win(NT,X,Y):-blocco(Tipo,NT,0,X,Y),winPosition(X,Y).
-:-#count{X : win(X,_,_)}<1.
-:-#count{X : win(X,_,_)}>1.
-
 %limito il movimento di piu blocchi contemporaneamente, 1 movimento consentito per TURNO (contMosse)
 mosso(T,ID):-contMosse(T),blocco(_,T,ID,_,Y1),blocco(_,TN,ID,_,Y2),TN=T+1,Y1<>Y2.
 mosso(T,ID):-contMosse(T),blocco(_,T,ID,X1,_),blocco(_,TN,ID,X2,_),TN=T+1,X1<>X2.
@@ -95,3 +87,16 @@ mosso(T,ID):-contMosse(T),blocco(_,T,ID,X1,_),blocco(_,TN,ID,X2,_),TN=T+1,X1<>X2
 
 %Non è POSSIBILE che due blocchi occupino la stessa cella al tempo T.
 :-piena(ID,T,X,Y),piena(ID1,T,X,Y),ID1<>ID.
+
+%condizioni vittoria, il blocco di vittoria sarà quello con id 0
+win(NT,X,Y):-blocco(_,NT,0,X,Y),winPosition(X,Y).
+%condizioni di vittoria per blocchi di tipo 1 e 2,basta che un blocco tocca la winPosition
+win(NT,X,Y):-blocco(1,NT,0,X,Y),winPosition(S,Y),S=X+1.
+win(NT,X,Y):-blocco(2,NT,0,X,Y),winPosition(X,S),S=Y+1.
+:-#count{X : win(X,_,_)}<1.
+%condizioni di vittoria per blocchi di tipo 3,servono 2 winPosition, il blocco deve poter
+%uscire dal goal.
+win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(S,Y),S=X+1.
+win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(X,S),S=Y+1.
+win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(K,S),S=Y+1,K=X+1.
+:-blocco(3,_,0,_,_),#count{K : win(K,_,_)}<2.

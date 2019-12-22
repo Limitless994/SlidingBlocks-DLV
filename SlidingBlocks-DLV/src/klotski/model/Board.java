@@ -26,13 +26,14 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-	//	public String encodingResource="encodings/SlidingBlocks-Rules";
-	//	public String instanceResource="encodings/SlidingBlocks-instance";
-	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
+	//	public String encodingResource="/SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+	//	public String instanceResource="/SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
+	public String encodingResource="encodings/SlidingBlocks-Rules";
+	public String instanceResource="encodings/SlidingBlocks-instance";
 
-	//	public Handler handler = new DesktopHandler(new DLVDesktopService("dlv2.win.x64_4"));
-	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
+	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
+	//	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
 	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
@@ -370,6 +371,7 @@ public class Board {
 
 	}
 	private void setInstance() {
+		//		Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
 		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		//String instance="";
 		//		for(int i= 0; i<height;i++) {
@@ -400,16 +402,20 @@ public class Board {
 		Output o =  handler.startSync();
 
 		AnswerSets answers = (AnswerSets) o;
-		String s2 = answers.getAnswersets().get(0).toString();
-		StringTokenizer st = new StringTokenizer(s2);
-		while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
-			String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
-			if(temp.contains("muovoGiu") ||temp.contains("muovoSu") ||temp.contains("muovoDestra")||temp.contains("muovoSinistra")) {
-				fillAnswerList(temp);
-//				System.out.println(temp);
+		try{
+			String s2 = answers.getAnswersets().get(0).toString();
+			StringTokenizer st = new StringTokenizer(s2);
+			while (st.hasMoreTokens()) { //per ognuno di questi answerset il programma deve essere in grado di orlare il file next-step con l'istanza aggiornata della mossa, ad esempio se canMoveDown sposti giù quella casella e 
+				String temp=st.nextToken();//ne calcoli le rispettive conseguenze. Questo va fatto per ognuno di questi fatti. Il tutto deve essere ricorsivo e deve continuare finché non trova la condizione di stop.
+				if(temp.contains("muovoGiu") ||temp.contains("muovoSu") ||temp.contains("muovoDestra")||temp.contains("muovoSinistra")) {
+					fillAnswerList(temp);
+					//				System.out.println(temp);
 
 
+				}
 			}
+		}catch(Exception e){
+			System.out.println("No Answerset compà");
 		}
 		handler.removeProgram(program);
 		handler.removeAll();
