@@ -15,6 +15,8 @@ import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import javafx.util.Pair;
+import klotski.controller.MovePieceController;
+import klotski.view.KlotskiApp;
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
 import it.unical.mat.embasp.base.Output;
@@ -26,14 +28,14 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-	//	public String encodingResource="/SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-	//	public String instanceResource="/SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
-	public String encodingResource="encodings/SlidingBlocks-Rules";
-	public String instanceResource="encodings/SlidingBlocks-instance";
+	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
+	//	public String encodingResource="encodings/SlidingBlocks-Rules";
+	//	public String instanceResource="encodings/SlidingBlocks-instance";
 
-	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
+	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
 	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
-	//	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
 	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
@@ -43,6 +45,15 @@ public class Board {
 	int width;
 	int moves; // number of moves the player has made
 	int configuration;
+	int nextDirection =0;
+	public int getNextDirection() {
+		return nextDirection;
+	}
+
+	public void setNextDirection(int nextDirection) {
+		this.nextDirection = nextDirection;
+	}
+
 	boolean hasWon;
 	int [][]matrix;
 
@@ -269,10 +280,10 @@ public class Board {
 			pieces[3] = new Piece(3, 2, 2, 1, 1);
 			pieces[4] = new Piece(4, 1, 2, 1, 1);
 			pieces[5] = new Piece(5, 2, 1, 1, 1);
-//			pieces[6] = new Piece(7, 3, 2, 1, 2);
-//			pieces[7] = new Piece(8, 1, 3, 1, 1);
-//			pieces[8] = new Piece(9, 2, 3, 1, 1);
-//			pieces[9] = new Piece(10, 1, 4, 2, 1);
+			//			pieces[6] = new Piece(7, 3, 2, 1, 2);
+			//			pieces[7] = new Piece(8, 1, 3, 1, 1);
+			//			pieces[8] = new Piece(9, 2, 3, 1, 1);
+			//			pieces[9] = new Piece(10, 1, 4, 2, 1);
 		} else if (configuration == 2) {
 			pieces[0] = new Piece(1, 1, 0, 2, 2);
 			pieces[1] = new Piece(2, 0, 0, 1, 1);
@@ -460,5 +471,31 @@ public class Board {
 		for(Piece p: this.pieces) {
 			if(p.getId()==id)p.move(direction);
 		}
+	}
+
+	public void moveBlock() {
+		int nextBlock = moveSequence.get(0).getValue();  
+		//		direction 0=up, 1=right, 2=down, 3=left
+		if(moveSequence.get(0).getKey().equals("U")) {
+			nextDirection =0;
+		}
+		else if(moveSequence.get(0).getKey().equals("D")) {
+			nextDirection=2;
+		}
+		else if(moveSequence.get(0).getKey().equals("L")) {
+			nextDirection=3;
+		}
+		else if(moveSequence.get(0).getKey().equals("R")) {
+			nextDirection=1;
+		}
+		for(Piece p: pieces) {
+			if( p.getId() ==  nextBlock){
+				selected= p;
+				System.out.println("Mosso: " + p.getId() + " Direzione: " + moveSequence.get(0).getKey() + " Controllo: " +nextDirection);
+				moveSequence.remove(0);
+				break;
+			}
+		}
+
 	}
 }

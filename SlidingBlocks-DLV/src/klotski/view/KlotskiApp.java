@@ -57,7 +57,7 @@ public class KlotskiApp extends JFrame {
 	 */
 	public KlotskiApp(Board b) {
 		this.board = b;
-		setTitle("Klotski");
+		setTitle("Sliding Blocks");
 		setFocusable(true);
 		requestFocus();
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -77,7 +77,7 @@ public class KlotskiApp extends JFrame {
 		 *   Klotski Menu   *
 		\********************/
 		
-		JMenu mnKlotski = new JMenu("Klotski");
+		JMenu mnKlotski = new JMenu("Sliding Blocks");
 		menuBar.add(mnKlotski);
 		
 		JMenuItem mntmSave = new JMenuItem("Save as...");
@@ -326,7 +326,6 @@ public class KlotskiApp extends JFrame {
 		});
 		
 		
-		
 		/*******************\
 		 *   GUI BUttons   *
 		\*******************/
@@ -362,6 +361,18 @@ public class KlotskiApp extends JFrame {
 		btnShow.setFocusable(false);
 		btnShow.setBounds(525, 70, 100, 25);
 		contentPane.add(btnShow);
+		
+		JButton btnmove = new JButton("Muovi Blocco");
+		btnmove.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				board.moveBlock();
+				new MovePieceController(KlotskiApp.this, board).move(board.getNextDirection());
+			}
+		});
+		btnmove.setFocusable(false);
+		btnmove.setBounds(425, 20, 100, 25);
+		contentPane.add(btnmove);
 		
 		btnReset = new JButton("Reset");
 		btnReset.addActionListener(new ActionListener() {
