@@ -330,6 +330,28 @@ public class KlotskiApp extends JFrame {
 		/*******************\
 		 *   GUI BUttons   *
 		\*******************/
+		JButton btnPause = new JButton("Pause");
+		btnPause.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("PAUSED SOLVER");
+			}
+		});
+		btnPause.setFocusable(false);
+		btnPause.setBounds(425, 120, 100, 25);
+		contentPane.add(btnPause);
+		
+		JButton btnPlay = new JButton("Play");
+		btnPlay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("PLAYNG SOLUTION");
+			}
+		});
+		btnPlay.setFocusable(false);
+		btnPlay.setBounds(525, 120, 100, 25);
+		contentPane.add(btnPlay);
+		
 		JButton btnShow = new JButton("Show");
 		btnShow.addActionListener(new ActionListener() {
 			@Override
@@ -338,7 +360,7 @@ public class KlotskiApp extends JFrame {
 			}
 		});
 		btnShow.setFocusable(false);
-		btnShow.setBounds(525, 25, 100, 25);
+		btnShow.setBounds(525, 70, 100, 25);
 		contentPane.add(btnShow);
 		
 		btnReset = new JButton("Reset");
@@ -349,9 +371,9 @@ public class KlotskiApp extends JFrame {
 			}
 		});
 		btnReset.setFocusable(false);
-		btnReset.setBounds(525, 70, 100, 25);
+		btnReset.setBounds(525, 20, 100, 25);
 		contentPane.add(btnReset);
-		
+
 		JButton btnQuit = new JButton("Quit");
 		btnQuit.addActionListener(new ActionListener() {
 			@Override
@@ -367,11 +389,11 @@ public class KlotskiApp extends JFrame {
 		\******************/
 
 		JLabel lblMoves = new JLabel("Moves:");
-		lblMoves.setBounds(475, 112, 66, 15);
+		lblMoves.setBounds(475, 330, 66, 15);
 		contentPane.add(lblMoves);
 		
 		movesCounter = new JLabel("0");
-		movesCounter.setBounds(550, 112, 66, 15);
+		movesCounter.setBounds(550, 330, 66, 15);
 		contentPane.add(movesCounter);
 	}
 }
