@@ -251,7 +251,7 @@ public class Board {
 		selected.move(direction);
 		++moves;
 		setMatrix();
-		//		printMatrix();
+		printMatrix();
 
 		return true;
 	}
@@ -421,8 +421,8 @@ public class Board {
 		temp = temp.replace(","," ");
 		temp = temp.replace("}"," ");
 		temp = temp.replace("{"," ");
-		temp = temp.replace("muovoSinistra","S");
-		temp = temp.replace("muovoDestra","D");
+		temp = temp.replace("muovoSinistra","L");
+		temp = temp.replace("muovoDestra","R");
 		temp = temp.replace("muovoSu","U");
 		temp = temp.replace("muovoGiu","D");
 		int contblank =0;
