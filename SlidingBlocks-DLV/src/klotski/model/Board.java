@@ -46,6 +46,9 @@ public class Board {
 	int moves; // number of moves the player has made
 	int configuration;
 	int nextDirection =0;
+	int xVittoria = 0;
+	int yVittoria = 2;
+	boolean movibile = false;
 	public int getNextDirection() {
 		return nextDirection;
 	}
@@ -199,6 +202,32 @@ public class Board {
 		return false;
 	}
 
+	public boolean hoVinto(int direction) {
+		if (selected == pieces[0]) {
+
+			//Caso vittoria destra
+
+			System.out.println("SELECTED Y " + selected.y + " VITTORIA A " + yVittoria);
+			System.out.println("SELECTED X " + selected.x + " VITTORIA A " + xVittoria);
+			//VITTORIA A SINISTRA
+			//caso arrivo da sopra e sotto
+			if(selected.y == yVittoria) {
+				//arrivo da sopra
+				System.out.println("CI SEI" + direction);
+
+				if(xVittoria ==selected.getX() && direction==3) {
+					hasWon = true;
+					return true;
+				}
+			}
+
+			//caso vittoria sopra
+
+			//caso vittoria sotto
+		}
+		return false;
+	}
+
 	/**
 	 * Tries to move the selected piece in the given direction
 	 * @param direction 0=up, 1=right, 2=down, 3=left
@@ -213,60 +242,79 @@ public class Board {
 		}
 
 		// check for a win
-		if (selected == pieces[0] && selected.x == 1 &&
-				selected.y == 3 && direction == 2) {
-			hasWon = true;
+		//		if (selected == pieces[0] && selected.x == xVittoria &&
+		//				selected.y == yVittoria && direction == 3) {
+		//			hasWon = true;
+		//			return true;
+		//		}
+
+		if(hoVinto(direction)==true) {
 			return true;
 		}
-
 		if (direction == 0) {
 			// up
-			if (selected.y == 0) return false;
+			if (selected.y == 0) {
+				movibile= false;
+				return false;
+			}
 			for (i = selected.x; i < selected.x + selected.w; ++i) {
 				if (isOccupied(i, selected.y - 1)) {
 					// there's a piece blocking this one
-					System.out.println("OCCUPATO SU");
+					movibile= false;
 					return false;
 				}
 			}
 		} else if (direction == 1) {
 			// right
-			if (selected.x + selected.w == width) return false;
+			if (selected.x + selected.w == width) {
+				movibile= false;
+				return false;
+			}
 			for (i = selected.y; i < selected.y + selected.h; ++i) {
 				if (isOccupied(selected.x + selected.w, i)) {
 					// there's a piece blocking this one
 					System.out.println("OCCUPATO");
+					movibile= false;
 					return false;
 				}
 			}
 		} else if (direction == 2) {
 			// down
-			if (selected.y + selected.h == height) return false;
+			if (selected.y + selected.h == height) {
+				movibile= false;
+				return false;
+			}
 			for (i = selected.x; i < selected.x + selected.w; ++i) {
 				if (isOccupied(i, selected.y + selected.h)) {
 					// there's a piece blocking this one
+					movibile= false;
 					return false;
 				}
 			}
 		} else if (direction == 3) {
 			// left
-			if (selected.x == 0) return false;
+			if (selected.x == 0) {
+				movibile= false;
+				return false;
+			}
 			for (i = selected.y; i < selected.y + selected.h; ++i) {
 				if (isOccupied(selected.x - 1, i)) {
 					// there's a piece blocking this one
+					movibile= false;
 					return false;
 				}
 			}
 		} else {
 			throw new IllegalArgumentException("direction must be 0..3");
 		}
-
+		System.out.println("MOVIBILE é TRUE");
+		movibile= true;
 		// if we've gotten here it means we're clear to move the selected piece
 		selected.move(direction);
 		++moves;
 		setMatrix();
 		printMatrix();
-	
+
 
 		return true;
 	}
@@ -475,11 +523,15 @@ public class Board {
 			if(p.getId()==id)p.move(direction);
 		}
 	}
-	
+
 	public void addUserAction(String direction) {
-		Pair<String, Integer> pair = new Pair<>(direction, selected.getId());
-		moveSequence.add(0, pair);
-		System.out.println("Aggiunto: " + pair.toString());
+
+		if(movibile==true) {
+			Pair<String, Integer> pair = new Pair<>(direction, selected.getId());
+			moveSequence.add(0, pair);
+			System.out.println("Aggiunto: " + pair.toString());
+		}
+
 	}
 
 	public void moveBlock() {
@@ -517,6 +569,6 @@ public class Board {
 	public void setMoveSequence(List<Pair<String, Integer>> moveSequence) {
 		this.moveSequence = moveSequence;
 	}
-	
-	
+
+
 }
