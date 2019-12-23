@@ -20,7 +20,7 @@ public class MovePieceController {
 	/**
 	 * Attempts to move the selected piece in the input direction. Does nothing
 	 * if no piece is selected. If move is successful, updates moves counter
-	 * @param direction 0=up, 1=right, 2=down, 3=right
+	 * @param direction 0=up, 1=right, 2=down, 3=left
 	 * @return true if move was successful, false otherwise
 	 */
 	public boolean move(int direction) {

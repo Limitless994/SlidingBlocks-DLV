@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -16,6 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
+
+import jdk.internal.util.xml.impl.Pair;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -268,18 +273,22 @@ public class KlotskiApp extends JFrame {
 						if (dx > 0) {
 							new MovePieceController(KlotskiApp.this, board)
 							.move(1);
+							board.addUserAction("L");
 						} else {
 							new MovePieceController(KlotskiApp.this, board)
 							.move(3);
+							board.addUserAction("R");
 						}
 					} else {
 						// vertical drag
 						if (dy > 0) {
 							new MovePieceController(KlotskiApp.this, board)
 							.move(2);
+							board.addUserAction("U");
 						} else {
 							new MovePieceController(KlotskiApp.this, board)
 							.move(0);
+							board.addUserAction("D");
 						}
 					}
 				}

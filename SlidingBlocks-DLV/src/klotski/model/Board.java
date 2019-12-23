@@ -172,6 +172,7 @@ public class Board {
 		for (Piece p : pieces) {
 			if (p.containsPoint(x, y)) {
 				selected = p;
+				System.out.println("SELECTED: " + selected.getId());
 				return true;
 			}
 		}
@@ -263,7 +264,6 @@ public class Board {
 		// if we've gotten here it means we're clear to move the selected piece
 		selected.move(direction);
 		++moves;
-		setInstance();
 		setMatrix();
 		printMatrix();
 	
@@ -409,7 +409,6 @@ public class Board {
 		//			e.printStackTrace();
 		//		}
 		//da generalizzare
-
 		program.addFilesPath(encodingResource);
 		program.addFilesPath(instanceResource);
 		handler.addProgram(program);
@@ -476,6 +475,12 @@ public class Board {
 			if(p.getId()==id)p.move(direction);
 		}
 	}
+	
+	public void addUserAction(String direction) {
+		Pair<String, Integer> pair = new Pair<>(direction, selected.getId());
+		moveSequence.add(0, pair);
+		System.out.println("Aggiunto: " + pair.toString());
+	}
 
 	public void moveBlock() {
 		int nextBlock = moveSequence.get(0).getValue();  
@@ -504,4 +509,14 @@ public class Board {
 		}
 
 	}
+
+	public List<Pair<String, Integer>> getMoveSequence() {
+		return moveSequence;
+	}
+
+	public void setMoveSequence(List<Pair<String, Integer>> moveSequence) {
+		this.moveSequence = moveSequence;
+	}
+	
+	
 }
