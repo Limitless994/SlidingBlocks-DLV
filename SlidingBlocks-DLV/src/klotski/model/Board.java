@@ -224,6 +224,7 @@ public class Board {
 			for (i = selected.x; i < selected.x + selected.w; ++i) {
 				if (isOccupied(i, selected.y - 1)) {
 					// there's a piece blocking this one
+					System.out.println("OCCUPATO SU");
 					return false;
 				}
 			}
@@ -233,6 +234,7 @@ public class Board {
 			for (i = selected.y; i < selected.y + selected.h; ++i) {
 				if (isOccupied(selected.x + selected.w, i)) {
 					// there's a piece blocking this one
+					System.out.println("OCCUPATO");
 					return false;
 				}
 			}
@@ -261,8 +263,10 @@ public class Board {
 		// if we've gotten here it means we're clear to move the selected piece
 		selected.move(direction);
 		++moves;
+		setInstance();
 		setMatrix();
 		printMatrix();
+	
 
 		return true;
 	}
@@ -478,9 +482,11 @@ public class Board {
 		//		direction 0=up, 1=right, 2=down, 3=left
 		if(moveSequence.get(0).getKey().equals("U")) {
 			nextDirection =0;
+			System.out.println("Ho mosso sù");
 		}
 		else if(moveSequence.get(0).getKey().equals("D")) {
 			nextDirection=2;
+			System.out.println("Ho mosso giù");
 		}
 		else if(moveSequence.get(0).getKey().equals("L")) {
 			nextDirection=3;
