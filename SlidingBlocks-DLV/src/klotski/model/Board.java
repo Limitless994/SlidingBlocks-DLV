@@ -173,7 +173,7 @@ public class Board {
 		for (Piece p : pieces) {
 			if (p.containsPoint(x, y)) {
 				selected = p;
-				System.out.println("SELECTED: " + selected.getId());
+//				System.out.println("SELECTED: " + selected.getId());
 				return true;
 			}
 		}
@@ -200,13 +200,6 @@ public class Board {
 		return false;
 	}
 
-	public boolean hoVinto(int direction) {
-		if(moveSequence.size()==0) {
-			return true;
-		}
-		return false;
-	}
-
 	/**
 	 * Tries to move the selected piece in the given direction
 	 * @param direction 0=up, 1=right, 2=down, 3=left
@@ -221,11 +214,13 @@ public class Board {
 		}
 
 		// check for a win
-		//		if (selected == pieces[0] && selected.x == xVittoria &&
-		//				selected.y == yVittoria && direction == 3) {
-		//			hasWon = true;
-		//			return true;
-		//		}
+		if (selected == pieces[0] && selected.x == 0 &&
+				selected.y == 1 && direction == 2 || 
+				selected == pieces[0] && selected.x == 1 &&
+				selected.y == 2 && direction == 3) {
+			System.out.println("Vinto");
+			hasWon = true;
+		}
 
 
 		if (direction == 0) {
@@ -250,7 +245,7 @@ public class Board {
 			for (i = selected.y; i < selected.y + selected.h; ++i) {
 				if (isOccupied(selected.x + selected.w, i)) {
 					// there's a piece blocking this one
-					System.out.println("OCCUPATO");
+//					System.out.println("OCCUPATO");
 					movibile= false;
 					return false;
 				}
@@ -284,18 +279,14 @@ public class Board {
 		} else {
 			throw new IllegalArgumentException("direction must be 0..3");
 		}
-		System.out.println("MOVIBILE é TRUE");
+//		System.out.println("MOVIBILE é TRUE");
 		movibile= true;
 		// if we've gotten here it means we're clear to move the selected piece
 		selected.move(direction);
 		++moves;
 		setMatrix();
-		printMatrix();
+//		printMatrix();
 		
-		if(hoVinto(direction)) {
-			hasWon=true;
-			return true;
-		}
 
 		return true;
 	}
@@ -374,7 +365,7 @@ public class Board {
 	public void setMatrix() {
 		initMatrix();
 		int id=0;
-		System.out.println();
+//		System.out.println();
 		for (Piece p : pieces) {
 			for(int i=p.y;i<p.y+p.h;i++) {
 				for(int j=p.x;j<p.x+p.w;j++) {
@@ -454,7 +445,7 @@ public class Board {
 				}
 			}
 		}catch(Exception e){
-			System.out.println("No Answerset compà");
+			System.out.println("No Answerset");
 		}
 		handler.removeProgram(program);
 		handler.removeAll();
@@ -476,7 +467,7 @@ public class Board {
 				String b = String.valueOf(temp.charAt(i));
 				Pair<String, Integer> pair = new Pair<>(a, Integer.parseInt(b));
 				moveSequence.add(pair);		
-				System.out.println(pair.getKey()+pair.getValue());
+//				System.out.println(pair.getKey()+pair.getValue());
 				break;
 			}
 			if(temp.charAt(i)==' ') {
@@ -510,7 +501,7 @@ public class Board {
 		if(movibile==true) {
 			Pair<String, Integer> pair = new Pair<>(direction, selected.getId());
 			moveSequence.add(0, pair);
-			System.out.println("Aggiunto: " + pair.toString());
+//			System.out.println("Aggiunto: " + pair.toString());
 		}
 
 	}
@@ -520,11 +511,11 @@ public class Board {
 		//		direction 0=up, 1=right, 2=down, 3=left
 		if(moveSequence.get(0).getKey().equals("U")) {
 			nextDirection =0;
-			System.out.println("Ho mosso sù");
+//			System.out.println("Ho mosso sù");
 		}
 		else if(moveSequence.get(0).getKey().equals("D")) {
 			nextDirection=2;
-			System.out.println("Ho mosso giù");
+//			System.out.println("Ho mosso giù");
 		}
 		else if(moveSequence.get(0).getKey().equals("L")) {
 			nextDirection=3;
@@ -535,7 +526,7 @@ public class Board {
 		for(Piece p: pieces) {
 			if( p.getId() ==  nextBlock){
 				selected= p;
-				System.out.println("Mosso: " + p.getId() + " Direzione: " + moveSequence.get(0).getKey() + " Controllo: " +nextDirection);
+//				System.out.println("Mosso: " + p.getId() + " Direzione: " + moveSequence.get(0).getKey() + " Controllo: " +nextDirection);
 				moveSequence.remove(0);
 				break;
 			}
