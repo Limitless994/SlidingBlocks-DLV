@@ -28,14 +28,14 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
-	//	public String encodingResource="encodings/SlidingBlocks-Rules";
-	//	public String instanceResource="encodings/SlidingBlocks-instance";
+	//	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+	//	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
+	public String encodingResource="encodings/SlidingBlocks-Rules";
+	public String instanceResource="encodings/SlidingBlocks-instance";
 
 	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
-	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
-	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
+	//	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
 	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
@@ -46,8 +46,6 @@ public class Board {
 	int moves; // number of moves the player has made
 	int configuration;
 	int nextDirection =0;
-	int xVittoria = 0;
-	int yVittoria = 2;
 	boolean movibile = false;
 	public int getNextDirection() {
 		return nextDirection;
@@ -203,27 +201,8 @@ public class Board {
 	}
 
 	public boolean hoVinto(int direction) {
-		if (selected == pieces[0]) {
-
-			//Caso vittoria destra
-
-			System.out.println("SELECTED Y " + selected.y + " VITTORIA A " + yVittoria);
-			System.out.println("SELECTED X " + selected.x + " VITTORIA A " + xVittoria);
-			//VITTORIA A SINISTRA
-			//caso arrivo da sopra e sotto
-			if(selected.y == yVittoria) {
-				//arrivo da sopra
-				System.out.println("CI SEI" + direction);
-
-				if(xVittoria ==selected.getX() && direction==3) {
-					hasWon = true;
-					return true;
-				}
-			}
-
-			//caso vittoria sopra
-
-			//caso vittoria sotto
+		if(moveSequence.size()==0) {
+			return true;
 		}
 		return false;
 	}
@@ -248,9 +227,7 @@ public class Board {
 		//			return true;
 		//		}
 
-		if(hoVinto(direction)==true) {
-			return true;
-		}
+
 		if (direction == 0) {
 			// up
 			if (selected.y == 0) {
@@ -314,7 +291,11 @@ public class Board {
 		++moves;
 		setMatrix();
 		printMatrix();
-
+		
+		if(hoVinto(direction)) {
+			hasWon=true;
+			return true;
+		}
 
 		return true;
 	}
@@ -433,8 +414,8 @@ public class Board {
 
 	}
 	private void setInstance() {
-		//		Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
-		Path path = Paths.get("encodings/SlidingBlocks-instance");
+		Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
+		//		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		//String instance="";
 		//		for(int i= 0; i<height;i++) {
 		//			for(int j= 0; j<width;j++) {

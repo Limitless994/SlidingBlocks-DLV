@@ -8,6 +8,5 @@ public class Main {
 		Board b = new Board();
 		KlotskiApp app = new KlotskiApp(b);
 		app.setVisible(true);
-		
 	}
 }
