@@ -28,14 +28,14 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-	//	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-	//	public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
-	public String encodingResource="encodings/SlidingBlocks-Rules";
-	public String instanceResource="encodings/SlidingBlocks-instance";
+		public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+		public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
+//	public String encodingResource="encodings/SlidingBlocks-Rules";
+//	public String instanceResource="encodings/SlidingBlocks-instance";
 
 	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
-	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
-	//	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
+		public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
 	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
@@ -72,7 +72,7 @@ public class Board {
 		reset();
 
 		this.height = 3;
-		this.width = 3;
+		this.width = 4;
 		matrix=new int[height][width];
 		initMatrix();
 		setMatrix();
@@ -296,29 +296,31 @@ public class Board {
 	 * sets moves to 0, sets selectedPiece to null, and sets hasWon to false
 	 */
 	public void reset() {
-		pieces = new Piece[6];
+		pieces = new Piece[7];
 		if (configuration == 1) {
-			pieces[0] = new Piece(0, 1, 0, 2, 1);
-			pieces[1] = new Piece(1, 0, 0, 1, 1);
-			pieces[2] = new Piece(2, 1, 1, 1, 1);
-			pieces[3] = new Piece(3, 2, 2, 1, 1);
-			pieces[4] = new Piece(4, 1, 2, 1, 1);
-			pieces[5] = new Piece(5, 2, 1, 1, 1);
-			//			pieces[6] = new Piece(7, 3, 2, 1, 2);
-			//			pieces[7] = new Piece(8, 1, 3, 1, 1);
-			//			pieces[8] = new Piece(9, 2, 3, 1, 1);
-			//			pieces[9] = new Piece(10, 1, 4, 2, 1);
+//			pieces[0] = new Piece(0, 1, 0, 2, 1);
+//			pieces[1] = new Piece(1, 0, 0, 1, 1);
+//			pieces[2] = new Piece(2, 1, 1, 1, 1);
+//			pieces[3] = new Piece(3, 2, 2, 1, 1);
+//			pieces[4] = new Piece(4, 1, 2, 1, 1);
+//			pieces[5] = new Piece(5, 2, 1, 1, 1);
+	
+//livello 2
+			pieces[0] = new Piece(0, 2, 0, 2, 1);
+			pieces[1] = new Piece(1, 1, 0, 1, 2);
+			pieces[2] = new Piece(2, 0, 2, 2, 1);
+			pieces[3] = new Piece(3, 2, 1, 1, 1);
+			pieces[4] = new Piece(4, 3, 1, 1, 1);
+			pieces[5] = new Piece(5, 2, 2, 1, 1);
+			pieces[6] = new Piece(6, 3, 2, 1, 1);
 		} else if (configuration == 2) {
-			pieces[0] = new Piece(1, 1, 0, 2, 2);
-			pieces[1] = new Piece(2, 0, 0, 1, 1);
-			pieces[2] = new Piece(3, 3, 0, 1, 1);
-			pieces[3] = new Piece(4, 0, 1, 1, 2);
-			pieces[4] = new Piece(5, 3, 1, 1, 2);
-			pieces[5] = new Piece(6, 1, 2, 1, 2);
-			pieces[6] = new Piece(7, 0, 3, 1, 1);
-			pieces[7] = new Piece(8, 3, 3, 1, 1);
-			pieces[8] = new Piece(9, 0, 4, 2, 1);
-			pieces[9] = new Piece(10, 2, 4, 2, 1);
+			pieces[0] = new Piece(0, 2, 0, 2, 1);
+			pieces[1] = new Piece(1, 1, 0, 1, 2);
+			pieces[2] = new Piece(2, 0, 2, 2, 1);
+			pieces[3] = new Piece(3, 2, 1, 1, 1);
+			pieces[4] = new Piece(4, 3, 1, 1, 1);
+			pieces[5] = new Piece(5, 2, 2, 1, 1);
+			pieces[6] = new Piece(6, 3, 2, 1, 1);
 		} else if (configuration == 3) {
 			pieces[0] = new Piece(1, 2, 1, 2, 2);
 			pieces[1] = new Piece(2, 0, 0, 1, 2);
