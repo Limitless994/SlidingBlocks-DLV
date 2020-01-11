@@ -2,7 +2,7 @@ coordX(0..3). %vanno da 0 a 2 quind
 coordY(0..2).
 LunghezzaMatrice(3).
 AltezzaMatrice(2).
-numMaxMosse(46).
+numMaxMosse(1).
 contMosse(0).
 winPosition(0,2).
 blocco(1, 0, 0, 2, 0).

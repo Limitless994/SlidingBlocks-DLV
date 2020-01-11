@@ -1,0 +1,11 @@
+coordX(0..2). %vanno da 0 a 2 quind
+coordY(0..1).
+LunghezzaMatrice(2).
+AltezzaMatrice(1).
+numMaxMosse(3).
+contMosse(0).
+winPosition(0,1).
+blocco(1, 0, 0, 1, 0).
+blocco(0, 0, 1, 1, 1).
+blocco(0, 0, 2, 2, 1).
+

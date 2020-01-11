@@ -28,14 +28,14 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-		public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-		public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
-//	public String encodingResource="encodings/SlidingBlocks-Rules";
-//	public String instanceResource="encodings/SlidingBlocks-instance";
+	//		public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+	//		public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
+	public String encodingResource="encodings/SlidingBlocks-Rules";
+	public String instanceResource="encodings/level";
 
 	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
-//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
-		public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
+	//		public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
 	public InputProgram  program = new ASPInputProgram();
 	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
@@ -47,6 +47,7 @@ public class Board {
 	int configuration;
 	int nextDirection =0;
 	boolean movibile = false;
+
 	public int getNextDirection() {
 		return nextDirection;
 	}
@@ -63,16 +64,29 @@ public class Board {
 	 * Basic constructor. Initializes height and width to standard klotski size.
 	 * Initializes pieces to configuration 1
 	 */
-	public Board() {
+	public Board(int level) {
 		this.pieces = new Piece[10];
-		this.configuration = 1;
+		this.configuration = level;
+		instanceResource=instanceResource+configuration;
 
 		// initialize all pieces to configuration 1, set moves to 0, set
 		// selectedPiece to null, and set hasWon to false
 		reset();
+		if(level==1) {
+			this.height =2;
+			this.width = 3;
 
-		this.height = 3;
-		this.width = 4;
+		}else if(level==2) {
+			this.height =3;
+			this.width = 4;	
+			
+		}else if(level==3)  {
+			this.height =3;
+			this.width = 3;	
+		}else if(level==4)  {
+			this.height =3;
+			this.width = 4;	
+		}
 		matrix=new int[height][width];
 		initMatrix();
 		setMatrix();
@@ -85,8 +99,8 @@ public class Board {
 	 */
 	public Board(Piece[] pieces) {
 		this.pieces = pieces;
-		this.height = 5;
-		this.width = 4;
+		this.height = this.getHeight();
+		this.width = this.getWidth();
 		this.moves = 0;
 		this.configuration = 1;
 		this.hasWon = false;
@@ -173,7 +187,7 @@ public class Board {
 		for (Piece p : pieces) {
 			if (p.containsPoint(x, y)) {
 				selected = p;
-//				System.out.println("SELECTED: " + selected.getId());
+				//				System.out.println("SELECTED: " + selected.getId());
 				return true;
 			}
 		}
@@ -214,6 +228,7 @@ public class Board {
 		}
 
 		// check for a win
+		if(configuration>1)
 		if (selected == pieces[0] && selected.x == 0 &&
 				selected.y == 1 && direction == 2 || 
 				selected == pieces[0] && selected.x == 1 &&
@@ -245,7 +260,7 @@ public class Board {
 			for (i = selected.y; i < selected.y + selected.h; ++i) {
 				if (isOccupied(selected.x + selected.w, i)) {
 					// there's a piece blocking this one
-//					System.out.println("OCCUPATO");
+					//					System.out.println("OCCUPATO");
 					movibile= false;
 					return false;
 				}
@@ -279,14 +294,13 @@ public class Board {
 		} else {
 			throw new IllegalArgumentException("direction must be 0..3");
 		}
-//		System.out.println("MOVIBILE é TRUE");
 		movibile= true;
 		// if we've gotten here it means we're clear to move the selected piece
 		selected.move(direction);
 		++moves;
 		setMatrix();
-//		printMatrix();
-		
+		//		printMatrix();
+
 
 		return true;
 	}
@@ -296,53 +310,38 @@ public class Board {
 	 * sets moves to 0, sets selectedPiece to null, and sets hasWon to false
 	 */
 	public void reset() {
-		pieces = new Piece[7];
+
 		if (configuration == 1) {
-//			pieces[0] = new Piece(0, 1, 0, 2, 1);
-//			pieces[1] = new Piece(1, 0, 0, 1, 1);
-//			pieces[2] = new Piece(2, 1, 1, 1, 1);
-//			pieces[3] = new Piece(3, 2, 2, 1, 1);
-//			pieces[4] = new Piece(4, 1, 2, 1, 1);
-//			pieces[5] = new Piece(5, 2, 1, 1, 1);
-	
-//livello 2
-			pieces[0] = new Piece(0, 2, 0, 2, 1);
-			pieces[1] = new Piece(1, 1, 0, 1, 2);
-			pieces[2] = new Piece(2, 0, 2, 2, 1);
-			pieces[3] = new Piece(3, 2, 1, 1, 1);
-			pieces[4] = new Piece(4, 3, 1, 1, 1);
-			pieces[5] = new Piece(5, 2, 2, 1, 1);
-			pieces[6] = new Piece(6, 3, 2, 1, 1);
+			pieces = new Piece[3];
+			pieces[0] = new Piece(0, 1, 0, 2, 1);
+			pieces[1] = new Piece(1, 1, 1, 1, 1);
+			pieces[2] = new Piece(2, 2, 1, 1, 1);
+			
 		} else if (configuration == 2) {
+			pieces = new Piece[4];
 			pieces[0] = new Piece(0, 2, 0, 2, 1);
-			pieces[1] = new Piece(1, 1, 0, 1, 2);
-			pieces[2] = new Piece(2, 0, 2, 2, 1);
+			pieces[1] = new Piece(1, 0, 1, 2, 2);
+			pieces[2] = new Piece(2, 2, 2, 1, 1);
 			pieces[3] = new Piece(3, 2, 1, 1, 1);
-			pieces[4] = new Piece(4, 3, 1, 1, 1);
-			pieces[5] = new Piece(5, 2, 2, 1, 1);
-			pieces[6] = new Piece(6, 3, 2, 1, 1);
+			
 		} else if (configuration == 3) {
-			pieces[0] = new Piece(1, 2, 1, 2, 2);
-			pieces[1] = new Piece(2, 0, 0, 1, 2);
-			pieces[2] = new Piece(3, 1, 0, 1, 1);
-			pieces[3] = new Piece(4, 2, 0, 1, 1);
-			pieces[4] = new Piece(5, 3, 0, 1, 1);
-			pieces[5] = new Piece(6, 1, 1, 1, 2);
-			pieces[6] = new Piece(7, 0, 2, 1, 2);
-			pieces[7] = new Piece(8, 1, 3, 2, 1);
-			pieces[8] = new Piece(9, 3, 3, 1, 1);
-			pieces[9] = new Piece(10, 2, 4, 2, 1);
-		} else if (configuration == 4) {
-			pieces[0] = new Piece(1, 1, 0, 2, 2);
-			pieces[1] = new Piece(2, 0, 0, 1, 2);
-			pieces[2] = new Piece(3, 3, 0, 1, 2);
-			pieces[3] = new Piece(4, 0, 2, 1, 2);
-			pieces[4] = new Piece(5, 1, 2, 2, 1);
-			pieces[5] = new Piece(6, 3, 2, 1, 2);
-			pieces[6] = new Piece(7, 1, 3, 1, 1);
-			pieces[7] = new Piece(8, 2, 3, 1, 1);
-			pieces[8] = new Piece(9, 0, 4, 1, 1);
-			pieces[9] = new Piece(10, 3, 4, 1, 1);
+			pieces = new Piece[6];
+			pieces[0] = new Piece(0, 1, 0, 2, 1);
+			pieces[1] = new Piece(1, 0, 0, 1, 1);
+			pieces[2] = new Piece(2, 1, 1, 1, 1);
+			pieces[3] = new Piece(3, 2, 2, 1, 1);
+			pieces[4] = new Piece(4, 1, 2, 1, 1);
+			pieces[5] = new Piece(5, 2, 1, 1, 1);
+		
+		}else if (configuration == 4) {
+			pieces = new Piece[7];
+			pieces[0] = new Piece(0, 2, 0, 2, 1);
+			pieces[1] = new Piece(1, 0, 2, 2, 1);
+			pieces[2] = new Piece(2, 1, 0, 1, 2);
+			pieces[3] = new Piece(3, 2, 1, 1, 1);
+			pieces[4] = new Piece(4, 2, 2, 1, 1);
+			pieces[5] = new Piece(5, 3, 1, 1, 1);
+			pieces[6] = new Piece(6, 3, 2, 1, 1);
 		}
 
 		moves = 0;
@@ -367,7 +366,7 @@ public class Board {
 	public void setMatrix() {
 		initMatrix();
 		int id=0;
-//		System.out.println();
+		//		System.out.println();
 		for (Piece p : pieces) {
 			for(int i=p.y;i<p.y+p.h;i++) {
 				for(int j=p.x;j<p.x+p.w;j++) {
@@ -407,8 +406,8 @@ public class Board {
 
 	}
 	private void setInstance() {
-		Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
-		//		Path path = Paths.get("encodings/SlidingBlocks-instance");
+		//		Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
+		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		//String instance="";
 		//		for(int i= 0; i<height;i++) {
 		//			for(int j= 0; j<width;j++) {
@@ -469,7 +468,7 @@ public class Board {
 				String b = String.valueOf(temp.charAt(i));
 				Pair<String, Integer> pair = new Pair<>(a, Integer.parseInt(b));
 				moveSequence.add(pair);		
-//				System.out.println(pair.getKey()+pair.getValue());
+				//				System.out.println(pair.getKey()+pair.getValue());
 				break;
 			}
 			if(temp.charAt(i)==' ') {
@@ -503,7 +502,7 @@ public class Board {
 		if(movibile==true) {
 			Pair<String, Integer> pair = new Pair<>(direction, selected.getId());
 			moveSequence.add(0, pair);
-//			System.out.println("Aggiunto: " + pair.toString());
+			//			System.out.println("Aggiunto: " + pair.toString());
 		}
 
 	}
@@ -513,22 +512,24 @@ public class Board {
 		//		direction 0=up, 1=right, 2=down, 3=left
 		if(moveSequence.get(0).getKey().equals("U")) {
 			nextDirection =0;
-//			System.out.println("Ho mosso sù");
+						System.out.println("Ho mosso sù");
 		}
 		else if(moveSequence.get(0).getKey().equals("D")) {
 			nextDirection=2;
-//			System.out.println("Ho mosso giù");
+						System.out.println("Ho mosso giù");
 		}
 		else if(moveSequence.get(0).getKey().equals("L")) {
 			nextDirection=3;
+			System.out.println("Ho mosso sx");
 		}
 		else if(moveSequence.get(0).getKey().equals("R")) {
 			nextDirection=1;
+			System.out.println("Ho mosso dx");
 		}
 		for(Piece p: pieces) {
 			if( p.getId() ==  nextBlock){
 				selected= p;
-//				System.out.println("Mosso: " + p.getId() + " Direzione: " + moveSequence.get(0).getKey() + " Controllo: " +nextDirection);
+				//				System.out.println("Mosso: " + p.getId() + " Direzione: " + moveSequence.get(0).getKey() + " Controllo: " +nextDirection);
 				moveSequence.remove(0);
 				break;
 			}

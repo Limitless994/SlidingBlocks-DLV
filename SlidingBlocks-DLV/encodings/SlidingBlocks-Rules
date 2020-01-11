@@ -90,12 +90,14 @@ mosso(T,ID):-contMosse(T),blocco(_,T,ID,X1,_),blocco(_,TN,ID,X2,_),TN=T+1,X1<>X2
 
 %condizioni vittoria, il blocco di vittoria sarà quello con id 0
 win(NT,X,Y):-blocco(_,NT,0,X,Y),winPosition(X,Y).
+
 %condizioni di vittoria per blocchi di tipo 1 e 2,basta che un blocco tocca la winPosition
 win(NT,X,Y):-blocco(1,NT,0,X,Y),winPosition(S,Y),S=X+1.
 win(NT,X,Y):-blocco(2,NT,0,X,Y),winPosition(X,S),S=Y+1.
 :-#count{X : win(X,_,_)}<1.
 %condizioni di vittoria per blocchi di tipo 3,servono 2 winPosition, il blocco deve poter
 %uscire dal goal.
+
 win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(S,Y),S=X+1.
 win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(X,S),S=Y+1.
 win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(K,S),S=Y+1,K=X+1.
