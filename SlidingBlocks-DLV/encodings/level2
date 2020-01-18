@@ -1,12 +1,10 @@
-coordX(0..3). %vanno da 0 a 2 quind
+coordX(0..3).
 coordY(0..2).
-LunghezzaMatrice(3).
-AltezzaMatrice(2).
-numMaxMosse(11).
+AltezzaMatrice(3).
+LunghezzaMatrice(2).
 contMosse(0).
-winPosition(0,2).
-%   (TIPO,TEMPO,ID,C,R)
-blocco(1, 0, 0, 2, 0).
-blocco(3, 0, 1, 0, 1).
+winPosition(2,0).
+blocco(1, 0, 0, 0, 2).
+blocco(3, 0, 1, 1, 0).
 blocco(0, 0, 2, 2, 2).
-blocco(0, 0, 3, 2, 1).
+blocco(0, 0, 3, 1, 2).

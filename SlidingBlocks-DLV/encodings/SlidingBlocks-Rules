@@ -1,21 +1,16 @@
-%ATTENZIONE LA MATRICE è SEGNATA COL METODO INGLESE, 
-%LA PRIMA COORDINATA è LA COLONNA, SE SCRIVO (0,1)
-%VOGLIO INDICARE LA RIGA NUMERO 2 E LA COLONNA 1
-%RISPETTIVAMENTE LUNGHEZZA = X, ALTEZZA Y. 
-%QUARTA CASELLA CONTANDO DA SINISTRA A DESTRA.
 
 %Set della matrice che conterrà i blocchi.
 cella(X,Y):-coordX(X),coordY(Y).
-vuota(T,X,Y) :-cell(X,Y),contMosse(T).
+vuota(T,X,Y) :-cella(X,Y),contMosse(T).
 
 %se di tipo 0 1x1 solo 1 blocco occupato.
 piena(ID,T,X,Y):-blocco(_,T,ID,X,Y),contMosse(T).
 
 %se di tipo 1 2x1 2 blocchi occupati quindi:
-piena(ID,T,X,Y):-blocco(1,T,ID,X1,Y),X=X1+1,contMosse(T).
+piena(ID,T,X,Y):-blocco(1,T,ID,X,Y1),Y=Y1+1,contMosse(T).
 
 %se di tipo 2 1x2 2 blocchi occupati quindi:
-piena(ID,T,X,Y):-blocco(2,T,ID,X,Y1),Y=Y1+1,contMosse(T).
+piena(ID,T,X,Y):-blocco(2,T,ID,X1,Y),X=X1+1,contMosse(T).
 
 %se di tipo 3 2x2 4 blocchi occupati quindi:
 piena(ID,T,X,Y):-blocco(3,T,ID,X,Y1),Y=Y1+1,contMosse(T).
@@ -26,29 +21,29 @@ piena(ID,T,X,Y):-blocco(3,T,ID,X1,Y1),Y=Y1+1,X=X1+1,contMosse(T).
 muovoSu(Tipo,T,ID,X,Y) | muovoGiu(Tipo,T,ID,X,Y) | muovoDestra(Tipo,T,ID,X,Y)| muovoSinistra(Tipo,T,ID,X,Y) | nonMuovo(Tipo,T,ID,X,Y) :-blocco(Tipo,T,ID,X,Y),contMosse(T).
 
 %condizioni che bloccano di muovere i blocchi fuori dai bordi.
-:-muovoSu(_,T,ID,X,Y), Y=0.
-:-muovoGiu(_,T,ID,X,Y),AltezzaMatrice(Y).
-:-muovoDestra(_,T,ID,X,Y),LunghezzaMatrice(X).
-:-muovoSinistra(_,T,ID,X,Y), X=0.
+:-muovoSu(_,T,ID,X,Y), X=0.
+:-muovoGiu(_,T,ID,X,Y),AltezzaMatrice(X).
+:-muovoDestra(_,T,ID,X,Y),LunghezzaMatrice(Y).
+:-muovoSinistra(_,T,ID,X,Y), Y=0.
 
-:-muovoDestra(1,T,ID,X,Y),K=X+1,LunghezzaMatrice(K).
-:-muovoGiu(2,T,ID,X,Y),AltezzaMatrice(Y).
+:-muovoDestra(1,T,ID,X,Y),K=Y+2,LunghezzaMatrice(K).
+:-muovoGiu(2,T,ID,X,Y),AltezzaMatrice(X).
 
-%:-muovoDestra(3,T,ID,X,Y), X=K,LunghezzaMatrice(S).
-%:-muovoGiu(3,T,ID,X,Y), Y=K,AltezzaMatrice(S).
+:-muovoDestra(3,T,ID,X,Y),K=Y+2,LunghezzaMatrice(K).
+:-muovoGiu(3,T,ID,X,Y),AltezzaMatrice(X).
 
 %condizioni che bloccano il movimento su un cella piena, vale per tutti i blocchi poiché tutti i tipi di blocchi
 %avranno un sotto-blocco originario.
-:-muovoSu(_,T,ID,X,Y), piena(ID1,T,X,Y1),Y1=Y-1,ID<>ID1.
-:-muovoGiu(_,T,ID,X,Y), piena(ID1,T,X,Y1),Y1=Y+1,ID<>ID1.
-:-muovoDestra(_,T,ID,X,Y), piena(ID1,T,X1,Y),X1=X+1,ID<>ID1.
-:-muovoSinistra(_,T,ID,X,Y), piena(ID1,T,X1,Y),X1=X-1,ID<>ID1.
+:-muovoSinistra(_,T,ID,X,Y), piena(ID1,T,X,Y1),Y1=Y-1,ID<>ID1.
+:-muovoDestra(_,T,ID,X,Y), piena(ID1,T,X,Y1),Y1=Y+1,ID<>ID1.
+:-muovoGiu(_,T,ID,X,Y), piena(ID1,T,X1,Y),X1=X+1,ID<>ID1.
+:-muovoSu(_,T,ID,X,Y), piena(ID1,T,X1,Y),X1=X-1,ID<>ID1.
 
 %condizioni che bloccano il movimento su un cella piena blocco 2x1
 %oltre il sotto-blocco originario avrà un blocco alla sua destra
 :-muovoGiu(1,T,ID,X,Y), piena(ID1,T,X1,Y1),X1=X+1,Y1=Y+1,ID<>ID1.
 :-muovoSu(1,T,ID,X,Y), piena(ID1,T,X1,Y1),X1=X-1,Y1=Y+1,ID<>ID1.
-:-muovoDestra(1,T,ID,X,Y), piena(ID1,T,X1,Y),X1=X+2,ID<>ID1.
+:-muovoDestra(1,T,ID,X,Y), piena(ID1,T,X,Y1),Y1=Y+2,ID<>ID1.
 
 %condizioni che bloccano il movimento su un cella piena blocco 1x2,
 %oltre il sotto-blocco originario avrà un blocco sotto
@@ -68,10 +63,10 @@ muovoSu(Tipo,T,ID,X,Y) | muovoGiu(Tipo,T,ID,X,Y) | muovoDestra(Tipo,T,ID,X,Y)| m
 
 %Genero blocchi con TN che sarebbe il tempo incrementato.
 %i blocchi varro generati per ogni contMosse che è il contatore del TEMPO.
-blocco(Tipo,TN,ID,X,S):-muovoSu(Tipo,T,ID,X,Y),TN=T+1,S=Y-1.
-blocco(Tipo,TN,ID,X,S):-muovoGiu(Tipo,T,ID,X,Y),TN=T+1,S=Y+1.
-blocco(Tipo,TN,ID,S,Y):-muovoDestra(Tipo,T,ID,X,Y),TN=T+1,S=X+1.
-blocco(Tipo,TN,ID,S,Y):-muovoSinistra(Tipo,T,ID,X,Y),TN=T+1,S=X-1.
+blocco(Tipo,TN,ID,X,S):-muovoDestra(Tipo,T,ID,X,Y),TN=T+1,S=Y+1.
+blocco(Tipo,TN,ID,X,S):-muovoSinistra(Tipo,T,ID,X,Y),TN=T+1,S=Y-1.
+blocco(Tipo,TN,ID,S,Y):-muovoSu(Tipo,T,ID,X,Y),TN=T+1,S=X-1.
+blocco(Tipo,TN,ID,S,Y):-muovoGiu(Tipo,T,ID,X,Y),TN=T+1,S=X+1.
 
 %Se hai un blocco e rimane fermo allora aggiorno il tempo ma non la posizione
 blocco(Tipo,TN,ID,X,Y):-nonMuovo(Tipo,T,ID,X,Y),TN=T+1.
@@ -92,8 +87,8 @@ mosso(T,ID):-contMosse(T),blocco(_,T,ID,X1,_),blocco(_,TN,ID,X2,_),TN=T+1,X1<>X2
 win(NT,X,Y):-blocco(_,NT,0,X,Y),winPosition(X,Y).
 
 %condizioni di vittoria per blocchi di tipo 1 e 2,basta che un blocco tocca la winPosition
-win(NT,X,Y):-blocco(1,NT,0,X,Y),winPosition(S,Y),S=X+1.
-win(NT,X,Y):-blocco(2,NT,0,X,Y),winPosition(X,S),S=Y+1.
+win(NT,X,Y):-blocco(2,NT,0,X,Y),winPosition(S,Y),S=X+1.
+win(NT,X,Y):-blocco(1,NT,0,X,Y),winPosition(X,S),S=Y+1.
 :-#count{X : win(X,_,_)}<1.
 %condizioni di vittoria per blocchi di tipo 3,servono 2 winPosition, il blocco deve poter
 %uscire dal goal.

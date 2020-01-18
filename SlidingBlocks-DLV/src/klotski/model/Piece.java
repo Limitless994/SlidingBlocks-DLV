@@ -23,7 +23,7 @@ public class Piece {
 	 * @param w the horizontal width of the piece
 	 * @param h the vertical height of the piece
 	 */
-	public Piece(int id,int x, int y, int w, int h) {
+	public Piece(int id, int w, int h, int y, int x) {
 		if (x < 0 || y < 0 || w < 1 || h < 1)
 			throw new IllegalArgumentException("Piece values must be positive");
 		this.x = x;
