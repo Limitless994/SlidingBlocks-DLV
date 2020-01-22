@@ -79,7 +79,7 @@ public class Board {
 			this.height =3;
 			this.width = 3;	
 		}else if(level==4)  {
-			this.height =3;
+			this.height =5;
 			this.width = 4;	
 		}
 		matrix=new int[height][width];
@@ -293,35 +293,39 @@ public class Board {
 
 		if (configuration == 1) {
 			pieces = new Piece[3];
-			pieces[0] = new Piece(0, 2, 1, 0, 1);
-			pieces[1] = new Piece(1, 1, 1, 1, 1);
+			//			pieces[0] = new Piece(0, 2, 1, 0, 1); VERSIONE A, SERVE PER
+			//			pieces[1] = new Piece(1, 1, 1, 1, 1); VERIFICARE CHE LA WIN
+			//			pieces[2] = new Piece(2, 1, 1, 1, 2); FUNZIONI A DOVERE
+			pieces[0] = new Piece(0, 2, 1, 0, 0);
+			pieces[1] = new Piece(1, 1, 1, 0, 2);
 			pieces[2] = new Piece(2, 1, 1, 1, 2);
-			
+
 		} else if (configuration == 2) {
-			pieces = new Piece[4];
+			pieces = new Piece[5];
 			pieces[0] = new Piece(0, 2, 1, 0, 2);
 			pieces[1] = new Piece(1, 2, 2, 1, 0);
 			pieces[2] = new Piece(2, 1, 1, 2, 2);
-			pieces[3] = new Piece(3, 1, 1, 1, 2);
-
+			pieces[3] = new Piece(3, 1, 1, 0, 0);
+			pieces[4] = new Piece(4, 1, 1, 0, 1);
 		} else if (configuration == 3) {
 			pieces = new Piece[6];
 			pieces[0] = new Piece(0, 2, 1, 0, 1);
 			pieces[1] = new Piece(1, 1, 1, 0, 0);
 			pieces[2] = new Piece(2, 1, 1, 1, 1);
 			pieces[3] = new Piece(3, 1, 1, 2, 2);
-			pieces[4] = new Piece(4, 1, 1, 2, 1);
-			pieces[5] = new Piece(5, 1, 1, 1, 2);
+			pieces[4] = new Piece(5, 1, 1, 2, 1);
+			pieces[5] = new Piece(4, 1, 1, 1, 2);
 
 		}else if (configuration == 4) {
-			pieces = new Piece[7];
-			pieces[0] = new Piece(0, 2, 1, 0, 2);
-			pieces[1] = new Piece(1, 2, 1, 2, 0);
-			pieces[2] = new Piece(2, 1, 2, 0, 1);
-			pieces[3] = new Piece(3, 1, 1, 1, 2);
-			pieces[4] = new Piece(4, 1, 1, 2, 2);
-			pieces[5] = new Piece(5, 1, 1, 1, 3);
-			pieces[6] = new Piece(6, 1, 1, 2, 3);
+			pieces = new Piece[6];
+			pieces[0] = new Piece(0, 2, 2, 0, 1);
+			pieces[1] = new Piece(1, 1, 2, 0, 0);
+			pieces[2] = new Piece(2, 1, 2, 0, 3);
+			pieces[3] = new Piece(3, 1, 2, 2, 0);
+			pieces[4] = new Piece(4, 1, 2, 2, 3);
+			pieces[5] = new Piece(5, 2, 1, 2, 1);
+//			pieces[6] = new Piece(6, 1, 1, 4, 0);
+//			pieces[7] = new Piece(7, 1, 1, 4, 3);
 		}
 
 		moves = 0;
@@ -397,7 +401,7 @@ public class Board {
 		do {
 			System.out.println("MOSSE: " +contMosse);
 			contMosse+=1;
-	
+
 			answers=null;
 			String instance="";
 			File file =new File(instanceResource); 
@@ -433,8 +437,8 @@ public class Board {
 			o =  handler.startSync();
 			answers = (AnswerSets) o;	
 
-			
-			
+
+
 		}while(answers.getAnswersets().isEmpty());
 
 		try{
@@ -449,9 +453,9 @@ public class Board {
 		}catch(Exception e){
 			//			System.out.println("No Answerset");
 		}
-		
-		
-		
+
+
+
 		handler.removeProgram(program);
 		handler.removeAll();
 
@@ -479,6 +483,7 @@ public class Board {
 				contblank++;
 			}
 		}
+		System.out.println(moveSequence);
 	}
 
 	public String getNextMatrix(String mossa, String instance) {

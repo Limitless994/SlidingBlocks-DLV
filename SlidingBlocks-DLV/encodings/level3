@@ -1,4 +1,4 @@
-coordX(0..2). %vanno da 0 a 2 quind
+coordX(0..2).
 coordY(0..2).
 LunghezzaMatrice(2).
 AltezzaMatrice(2).
@@ -9,4 +9,4 @@ blocco(0, 0, 1, 0, 0).
 blocco(0, 0, 2, 1, 1).
 blocco(0, 0, 3, 2, 2).
 blocco(0, 0, 5, 2, 1).
-blocco(0, 0, 4, 1, 2).
+%blocco(0, 0, 4, 1, 2).

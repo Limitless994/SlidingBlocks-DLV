@@ -1,10 +1,11 @@
-coordX(0..3).
-coordY(0..2).
-AltezzaMatrice(3).
-LunghezzaMatrice(2).
+coordX(0..2).
+coordY(0..3).
+AltezzaMatrice(2).
+LunghezzaMatrice(3).
 contMosse(0).
 winPosition(2,0).
 blocco(1, 0, 0, 0, 2).
 blocco(3, 0, 1, 1, 0).
 blocco(0, 0, 2, 2, 2).
-blocco(0, 0, 3, 1, 2).
+blocco(0, 0, 3, 0, 0).
+blocco(0, 0, 4, 0, 1).
