@@ -108,15 +108,15 @@ public class PuzzleView extends JPanel {
 		
 		// draw red line at bottom to show exit slot
 		offScreenGraphics.setColor(Color.decode("#e06d78"));
-				offScreenGraphics.fillRect(0,200,6,squareSize);
+				offScreenGraphics.fillRect(0,board.getWinX()*100,6,squareSize);
 		
 		//offScreenGraphics.fillRect(x, y, width, height);
 		// congratulate the player if he/she has won
 		if (board.checkWin()) {
 			offScreenGraphics.setColor(Color.black);
 			offScreenGraphics.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,45));
-			offScreenGraphics.drawString("Congratulations!", 10, 72);
-			offScreenGraphics.drawString("You win!", 105, 172);
+			offScreenGraphics.drawString("Congratulazioni!", 10, 72);
+			offScreenGraphics.drawString("Hai vinto!", 105, 172);	
 		}
 	}
 	

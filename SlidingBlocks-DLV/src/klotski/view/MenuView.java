@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 
@@ -117,6 +118,13 @@ public class MenuView extends JPanel {
 			offScreenGraphics.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,45));
 			offScreenGraphics.drawString("Congratulations!", 10, 72);
 			offScreenGraphics.drawString("You win!", 105, 172);
+			try {
+				TimeUnit.SECONDS.sleep(2);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	

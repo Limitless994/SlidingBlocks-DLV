@@ -17,7 +17,7 @@ import klotski.view.KlotskiApp;
 public class Main{
 
 	public static void main(String[] args) {
-				Board b = new Board(4);
+				Board b = new Board(1);
 				//livello
 				KlotskiApp app = new KlotskiApp(b);
 				app.setVisible(true);

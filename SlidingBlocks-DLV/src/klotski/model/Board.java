@@ -30,16 +30,21 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 
 public class Board {
-	//		public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-	//		public String instanceResource="SlidingBlocks-DLV/encodings/SlidingBlocks-instance";
-	public String encodingResource="encodings/SlidingBlocks-Rules";
-	public String instanceResource="encodings/level";
-	public String output="encodings/output";
-	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
-	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
-	//		public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+	//path riccardo
+	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+	public String instanceResource="SlidingBlocks-DLV/encodings/level";
+	public String output="SlidingBlocks-DLV/encodings/output";
+	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+	//path normali
+	//	public String encodingResource="encodings/SlidingBlocks-Rules";
+	//	public String instanceResource="encodings/level";
+	//	public String output="encodings/output";
+	////	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
+	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
+
 	public InputProgram  program = new ASPInputProgram();
 	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
+	List<Pair<String,Integer>> moveSequenceTmp=new ArrayList<Pair<String,Integer>>();
 	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
 	Piece[] pieces;
 	Piece selected;
@@ -48,6 +53,8 @@ public class Board {
 	int moves;
 	int configuration;
 	int nextDirection =0;
+	int winX;
+	int winY;
 	boolean movibile = false;
 
 	public int getNextDirection() {
@@ -83,6 +90,7 @@ public class Board {
 			this.width = 4;	
 		}
 		matrix=new int[height][width];
+		moveSequence =new ArrayList<Pair<String,Integer>>();
 		initMatrix();
 		setMatrix();
 		setInstance();
@@ -215,19 +223,19 @@ public class Board {
 	public boolean movePiece(int direction) {
 		int i;
 
-		if (selected == null) {
+		if (selected == null || hasWon==true) {
 			return false;
 		}
 
-		if(configuration>1)
-			if (selected == pieces[0] && selected.x == 0 &&
-			selected.y == 1 && direction == 2 || 
-			selected == pieces[0] && selected.x == 1 &&
-			selected.y == 2 && direction == 3) {
-				System.out.println("Vinto");
-				hasWon = true;
-			}
 
+//		 if(configuration>1)
+//			if (selected == pieces[0] && selected.x == 0 &&
+//			selected.y == 1 && direction == 2 || 
+//			selected == pieces[0] && selected.x == 1 &&
+//			selected.y == 2 && direction == 3) {
+//				System.out.println("Vinto");
+//				hasWon = true;
+//			}
 
 		if (direction == 0) {
 			// up
@@ -283,15 +291,33 @@ public class Board {
 		selected.move(direction);
 		++moves;
 		setMatrix();
+//		System.out.println("COORDINATE" + selected.getX() + selected.getY());
+		if(checkVittoria()==true){
+			hasWon = true;
+		}
 		//		printMatrix();
 
 
 		return true;
 	}
 
-	public void reset() {
+	public boolean checkVittoria(){
 
+
+		if (selected == pieces[0] && selected.getX() ==winY && selected.getY()==winX) {
+
+
+			System.out.println("Vinto");	
+			return true;
+		}
+
+		return false;
+	}
+
+	public void reset() {
 		if (configuration == 1) {
+			winX = 1;
+			winY = 0;
 			pieces = new Piece[3];
 			//			pieces[0] = new Piece(0, 2, 1, 0, 1); VERSIONE A, SERVE PER
 			//			pieces[1] = new Piece(1, 1, 1, 1, 1); VERIFICARE CHE LA WIN
@@ -301,6 +327,8 @@ public class Board {
 			pieces[2] = new Piece(2, 1, 1, 1, 2);
 
 		} else if (configuration == 2) {
+			winX = 2;
+			winY = 0;
 			pieces = new Piece[5];
 			pieces[0] = new Piece(0, 2, 1, 0, 2);
 			pieces[1] = new Piece(1, 2, 2, 1, 0);
@@ -308,6 +336,8 @@ public class Board {
 			pieces[3] = new Piece(3, 1, 1, 0, 0);
 			pieces[4] = new Piece(4, 1, 1, 0, 1);
 		} else if (configuration == 3) {
+			winX = 2;
+			winY = 0;
 			pieces = new Piece[6];
 			pieces[0] = new Piece(0, 2, 1, 0, 1);
 			pieces[1] = new Piece(1, 1, 1, 0, 0);
@@ -317,6 +347,8 @@ public class Board {
 			pieces[5] = new Piece(4, 1, 1, 1, 2);
 
 		}else if (configuration == 4) {
+			winX = 2;
+			winY = 0;
 			pieces = new Piece[6];
 			pieces[0] = new Piece(0, 2, 2, 0, 1);
 			pieces[1] = new Piece(1, 1, 2, 0, 0);
@@ -324,8 +356,8 @@ public class Board {
 			pieces[3] = new Piece(3, 1, 2, 2, 0);
 			pieces[4] = new Piece(4, 1, 2, 2, 3);
 			pieces[5] = new Piece(5, 2, 1, 2, 1);
-//			pieces[6] = new Piece(6, 1, 1, 4, 0);
-//			pieces[7] = new Piece(7, 1, 1, 4, 3);
+			//			pieces[6] = new Piece(6, 1, 1, 4, 0);
+			//			pieces[7] = new Piece(7, 1, 1, 4, 3);
 		}
 
 		moves = 0;
@@ -389,8 +421,8 @@ public class Board {
 
 	}
 	private void setInstance() {
-		//Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
-		Path path = Paths.get("encodings/SlidingBlocks-instance");
+		Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
+		//		Path path = Paths.get("encodings/SlidingBlocks-instance");
 		Output o;
 		AnswerSets answers=null;
 		int contMosse=0;
@@ -458,7 +490,6 @@ public class Board {
 
 		handler.removeProgram(program);
 		handler.removeAll();
-
 	}
 	public void fillAnswerList(String temp) {
 		temp = temp.replace(","," ");
@@ -546,6 +577,7 @@ public class Board {
 
 	}
 
+
 	public List<Pair<String, Integer>> getMoveSequence() {
 		return moveSequence;
 	}
@@ -553,6 +585,32 @@ public class Board {
 	public void setMoveSequence(List<Pair<String, Integer>> moveSequence) {
 		this.moveSequence = moveSequence;
 	}
+
+	public int getWinX() {
+		return winX;
+	}
+
+	public void setWinX(int winX) {
+		this.winX = winX;
+	}
+
+	public int getWinY() {
+		return winY;
+	}
+
+	public void setWinY(int winY) {
+		this.winY = winY;
+	}
+
+	public int getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(int configuration) {
+		this.configuration = configuration;
+	}
+
+	
 
 
 }
