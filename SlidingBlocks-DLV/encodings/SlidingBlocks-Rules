@@ -88,11 +88,4 @@ win(NT,X,Y):-blocco(_,NT,0,X,Y),winPosition(X,Y).
 %condizioni di vittoria per blocchi di tipo 1 e 2,basta che un blocco tocca la winPosition
 win(NT,X,Y):-blocco(1,NT,0,X,Y),winPosition(X,S),S=Y+1.
 win(NT,X,Y):-blocco(2,NT,0,X,Y),winPosition(S,Y),S=X+1.
-%:-#count{X : win(X,_,_)}<1.
-
-%condizioni di vittoria per blocchi di tipo 3,servono 2 winPosition, il blocco deve poter
-%uscire dal goal.
-%win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(X,S),S=Y+1. IN CASO IL BLOCCO DEBBA USCIRE LATERALMENTE
-win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(S,Y),S=X+1.
-win(NT,X,Y):-blocco(3,NT,0,X,Y),winPosition(K,S),S=Y+1,K=X+1.
-:-#count{K : win(K,_,_)}<2.
+:-#count{X : win(X,_,_)}<1.

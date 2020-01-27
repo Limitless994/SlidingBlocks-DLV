@@ -3,13 +3,7 @@ coordY(0..2).
 AltezzaMatrice(1).
 LunghezzaMatrice(2).
 contMosse(0).
-
-%winPosition(2,0). 	    QUESTA è LA VERSIONE A
-%blocco(1, 0, 0, 0, 1). SERVE PER
-%blocco(0, 0, 1, 1, 1). VERIFICARE CHE LA WIN
-%blocco(0, 0, 2, 1, 2). FUNZIONI A DOVERE
-
-winPosition(1,2). 
-blocco(1, 0, 0, 0, 0).
-blocco(0, 0, 1, 0, 2).
-blocco(0, 0, 2, 1, 2).
+winPosition(1,0).
+blocco(1, 0, 0, 0, 1).
+blocco(0, 0, 1, 0, 0). 
+blocco(0, 0, 2, 1, 0). 

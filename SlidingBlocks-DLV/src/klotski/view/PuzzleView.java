@@ -15,74 +15,58 @@ public class PuzzleView extends JPanel {
 	private static final long serialVersionUID = 3251334679791843551L;
 
 	Board board;
-	
-	/** Off-screen image for drawing (and Graphics object) */
+
 	Image offScreenImage = null;
 	Graphics offScreenGraphics = null;
-	
-	/** space between pieces and at edges */
+
 	final int spacing = 5;
-	
-	/** size of a single square on the board */
+
 	final int squareSize = 100;
-	
-	/** squareSize getter */
+
 	public int getSquareSize() { return squareSize; }
-	
-	/**
-	 * Basic constructor
-	 * @param b the model Board
-	 */
+
+
 	public PuzzleView(Board b) {
 		this.board = b;
 	}
-	
-	/**
-	 * Set the size depending on the height and width of the puzzle
-	 */
+
+
 	@Override
 	public Dimension getPreferredSize() {
 		int width = squareSize * board.getWidth();
 		int height = squareSize * board.getHeight() + 6;
-		
+
 		return new Dimension(width, height);
 	}
-	
-	/**
-	 * Draws the background and all pieces
-	 */
+
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-				
+
 		if (offScreenImage == null) {
 			Dimension s = getPreferredSize();
 			offScreenImage = this.createImage(s.width, s.height);
 			if (offScreenImage == null) { return; }
-			
+
 			offScreenGraphics = offScreenImage.getGraphics();
 			redraw();
 		}
-		
-		// copy image into place
+
 		g.drawImage(offScreenImage, 0, 0, this);
-		
+
 	}
-	
-	/**
-	 * draws background and then all pieces on top of it
-	 */
+
+
 	public void redraw() {
 		if (offScreenImage == null) { return; }
-		
+
 		Dimension s = getPreferredSize();
 		offScreenGraphics.clearRect(0, 0, s.width, s.height);
-		
-		// draw background
+
 		Dimension s1 = getPreferredSize();
 		offScreenGraphics.setColor(Color.decode("#dddddd"));
 		offScreenGraphics.fillRect(0, 0, s1.width, s1.height);
-		
-		// draw all pieces
+
 		Piece[] p = board.getPieces();
 		int[] currentDims;
 		for (int i = 0; i < p.length; ++i) {
@@ -97,32 +81,41 @@ public class PuzzleView extends JPanel {
 					currentDims[1] * squareSize + spacing,
 					currentDims[2] * squareSize - spacing * 2,
 					currentDims[3] * squareSize - spacing * 2);
-			
-			// black outline
+
 			offScreenGraphics.setColor(Color.decode("#222222"));
 			offScreenGraphics.drawRect(currentDims[0] * squareSize + spacing,
 					currentDims[1] * squareSize + spacing,
 					currentDims[2] * squareSize - spacing * 2,
 					currentDims[3] * squareSize - spacing * 2);
 		}
-		
-		// draw red line at bottom to show exit slot
-		offScreenGraphics.setColor(Color.decode("#e06d78"));
-				offScreenGraphics.fillRect(0,board.getWinX()*100,6,squareSize);
-		
-		//offScreenGraphics.fillRect(x, y, width, height);
-		// congratulate the player if he/she has won
+
+		// LINEA ROSSA VITTORIA
+		if(board.getConfiguration()==4) {
+			offScreenGraphics.setColor(Color.decode("#e06d78"));
+			offScreenGraphics.fillRect(100,500,squareSize*2,6);
+		}else {
+			offScreenGraphics.setColor(Color.decode("#e06d78"));
+			offScreenGraphics.fillRect(0,board.getWinX()*100,6,squareSize);
+		}
+
 		if (board.checkWin()) {
 			offScreenGraphics.setColor(Color.black);
-			offScreenGraphics.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,45));
-			offScreenGraphics.drawString("Congratulazioni!", 10, 72);
-			offScreenGraphics.drawString("Hai vinto!", 105, 172);	
+			
+			if(board.getConfiguration()==1) {
+				offScreenGraphics.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,30));
+				offScreenGraphics.drawString("Congratulazioni!", 40, 72);
+				offScreenGraphics.drawString("Hai vinto!", 90, 172);
+			}
+			else {
+				offScreenGraphics.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,45));
+				offScreenGraphics.drawString("Congratulazioni!", 10, 72);
+				offScreenGraphics.drawString("Hai vinto!", 105, 172);
+			}
+				
 		}
 	}
-	
-	/**
-	 * redraws the whole PuzzleView when pieces are changed
-	 */
+
+
 	public void refresh() {
 		if (offScreenImage == null) { return; }
 		offScreenGraphics.clearRect(0, 0, offScreenImage.getWidth(this),

@@ -4,9 +4,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -20,10 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
-import jdk.internal.util.xml.impl.Pair;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -31,15 +26,11 @@ import javax.swing.JMenuItem;
 
 import klotski.model.Board;
 import klotski.controller.AboutController;
-import klotski.controller.LicenseController;
 import klotski.controller.MovePieceController;
-import klotski.controller.OpenController;
 import klotski.controller.QuitController;
 import klotski.controller.ResetPuzzleController;
-import klotski.controller.SaveController;
 import klotski.controller.SelectPieceController;
-import klotski.controller.SetConfigController;
-import klotski.controller.ShowMatrixController;
+
 
 public class KlotskiApp extends JFrame {
 	Board board;	
@@ -49,23 +40,18 @@ public class KlotskiApp extends JFrame {
 	JButton btnmove;
 	Point storedPoint;
 
-	//Necessary to suppress an Eclipse warning
 	private static final long serialVersionUID = 5052390254637954176L;
 
 	private JPanel contentPane;
 
-	/** return actionable elements */
 	public JLabel getMovesCounter() { return movesCounter; }
 	public PuzzleView getPuzzleView() { return puzzleView; }
 	public JButton getResetButton() { return btnReset; }
 	public JButton getMoveButton() { return btnmove; }
 
-	/**
-	 * Create the frame.
-	 */
 	public KlotskiApp(Board b) {
 		this.board = b;
-		setTitle("Sliding Blocks");
+		setTitle("Sliding Blocks Geometry DLV");
 		setFocusable(true);
 		requestFocus();
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -75,51 +61,12 @@ public class KlotskiApp extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JFileChooser fc = new JFileChooser();
-
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 
-		/********************\
-		 *   Klotski Menu   *
-		\********************/
-
-		JMenu mnKlotski = new JMenu("Sliding Blocks");
+		JMenu mnKlotski = new JMenu("Sliding Blocks Geometry DLV");
 		menuBar.add(mnKlotski);
-
-		//		JMenuItem mntmSave = new JMenuItem("Save as...");
-		//		mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-		//				InputEvent.CTRL_MASK));
-		//		mnKlotski.add(mntmSave);
-		//
-		//		mntmSave.addActionListener(new ActionListener() {
-		//			@Override
-		//			public void actionPerformed(ActionEvent e) {
-		//				if (fc.showSaveDialog(KlotskiApp.this) == 
-		//						JFileChooser.APPROVE_OPTION) {
-		//					String path = fc.getSelectedFile().getAbsolutePath();
-		//					new SaveController(board, Paths.get(path)).save();
-		//				}
-		//			}
-		//		});
-		//
-		//		JMenuItem mntmOpen = new JMenuItem("Open...");
-		//		mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, 
-		//				InputEvent.CTRL_MASK));
-		//		mnKlotski.add(mntmOpen);
-		//
-		//		mntmOpen.addActionListener(new ActionListener() {
-		//			@Override
-		//			public void actionPerformed(ActionEvent e) {
-		//				if (fc.showOpenDialog(KlotskiApp.this) == 
-		//						JFileChooser.APPROVE_OPTION) {
-		//					String path = fc.getSelectedFile().getAbsolutePath();
-		//					new OpenController(KlotskiApp.this, board, Paths.get(path))
-		//					.open();
-		//				}
-		//			}
-		//		});
 
 		JMenuItem mntmQuit = new JMenuItem("Chiudi");
 		mntmQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, 
@@ -134,11 +81,6 @@ public class KlotskiApp extends JFrame {
 				}
 			}
 		});
-
-
-		/*****************\
-		 *   Puzzle Menu   *
-		\*****************/
 
 		JMenu mnPuzzle = new JMenu("Puzzle");
 		menuBar.add(mnPuzzle);
@@ -216,11 +158,6 @@ public class KlotskiApp extends JFrame {
 			}
 		});
 
-
-		/*****************\
-		 *   Help Menu   *
-		\*****************/
-
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 
@@ -235,23 +172,6 @@ public class KlotskiApp extends JFrame {
 			}
 		});
 
-		JMenuItem mntmLicense = new JMenuItem("License");
-		mntmLicense.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
-		mnHelp.add(mntmLicense);
-
-		mntmLicense.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new LicenseController(KlotskiApp.this).show();
-			}
-		});
-
-
-
-		/********************\
-		 *   Close Window   *
-		\********************/
-
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent we) {
@@ -260,12 +180,6 @@ public class KlotskiApp extends JFrame {
 				}
 			}
 		});
-
-
-
-		/*******************\
-		 *   Puzzle View   *
-		\*******************/
 
 		puzzleView = new PuzzleView(board);
 		puzzleView.addMouseListener(new MouseAdapter() {
@@ -283,9 +197,7 @@ public class KlotskiApp extends JFrame {
 				int dx = newPoint.x - storedPoint.x;
 				int dy = newPoint.y - storedPoint.y;
 				if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-					// mouse dragged
 					if (Math.abs(dx) > Math.abs(dy)) {
-						// horizontal drag
 						if (dx > 0) {
 							new MovePieceController(KlotskiApp.this, board)
 							.move(1);
@@ -296,7 +208,6 @@ public class KlotskiApp extends JFrame {
 							board.addUserAction("R");
 						}
 					} else {
-						// vertical drag
 						if (dy > 0) {
 							new MovePieceController(KlotskiApp.this, board)
 							.move(2);
@@ -313,11 +224,6 @@ public class KlotskiApp extends JFrame {
 		puzzleView.setBounds(12, 12, puzzleView.getPreferredSize().width,
 				puzzleView.getPreferredSize().height);
 		contentPane.add(puzzleView);
-
-
-		/*************************\
-		 *   Keyboard Listener   *
-		\*************************/
 
 		this.addKeyListener(new KeyListener() {
 			@Override
@@ -350,47 +256,6 @@ public class KlotskiApp extends JFrame {
 
 		});
 
-
-		/*******************\
-		 *   GUI BUttons   *
-		\*******************/
-//		JButton btnPause = new JButton("Pause");
-//		btnPause.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				System.out.println("PAUSED SOLVER");
-//			}
-//		});
-//		btnPause.setFocusable(false);
-//		btnPause.setBounds(425, 120, 100, 25);
-//		contentPane.add(btnPause);
-
-//		JButton btnPlay = new JButton("Play");
-//		btnPlay.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//
-//				System.out.println("Avviata risoluzione automatica temporizzata");
-//				Play();
-//				
-//
-//			}
-//		});
-//		btnPlay.setFocusable(false);
-//		btnPlay.setBounds(525, 120, 100, 25);
-//		contentPane.add(btnPlay);
-
-//		JButton btnShow = new JButton("Show");
-//		btnShow.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				new ShowMatrixController(board).show();
-//			}
-//		});
-//		btnShow.setFocusable(false);
-//		btnShow.setBounds(525, 70, 100, 25);
-//		contentPane.add(btnShow);
-
 		JButton btnmove = new JButton("Fai Mossa");
 		btnmove.addActionListener(new ActionListener() {
 			@Override
@@ -399,7 +264,7 @@ public class KlotskiApp extends JFrame {
 					board.moveBlock();
 					new MovePieceController(KlotskiApp.this, board).move(board.getNextDirection());
 				}
-		
+
 			}
 		});
 		btnmove.setFocusable(false);
@@ -409,10 +274,8 @@ public class KlotskiApp extends JFrame {
 		btnReset = new JButton("Reset");
 		btnReset.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-//				new ResetPuzzleController(KlotskiApp.this, board).reset();
-				
-				
+			public void actionPerformed(ActionEvent arg0) {				
+
 				Board b = new Board(board.getConfiguration());
 				KlotskiApp app = new KlotskiApp(b);
 				app.setVisible(true);
@@ -433,10 +296,6 @@ public class KlotskiApp extends JFrame {
 			}
 		});
 
-		/******************\
-		 *   GUI Labels   *
-		\******************/
-
 		JLabel lblMoves = new JLabel("Moves:");
 		lblMoves.setBounds(475, 330, 66, 15);
 		contentPane.add(lblMoves);
@@ -448,17 +307,16 @@ public class KlotskiApp extends JFrame {
 	public void Play() {
 		for(int i =0;i<board.getMoveSequence().size();i++) {
 			board.moveBlock();
- 			new MovePieceController(KlotskiApp.this, board).move(board.getNextDirection());
+			new MovePieceController(KlotskiApp.this, board).move(board.getNextDirection());
 			try {
 				TimeUnit.SECONDS.sleep(2);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		
+
 	}
-	
-	
+
+
 }

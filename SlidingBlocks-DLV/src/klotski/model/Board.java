@@ -1,29 +1,20 @@
 package klotski.model;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-import java.util.concurrent.TimeUnit;
 
 import javafx.util.Pair;
-import klotski.controller.MovePieceController;
-import klotski.view.KlotskiApp;
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
 import it.unical.mat.embasp.base.Output;
 import it.unical.mat.embasp.languages.asp.ASPInputProgram;
-import it.unical.mat.embasp.languages.asp.AnswerSet;
 import it.unical.mat.embasp.languages.asp.AnswerSets;
 import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
 import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
@@ -31,21 +22,25 @@ import it.unical.mat.embasp.specializations.dlv.desktop.DLVDesktopService;
 
 public class Board {
 	//path riccardo
-	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
-	public String instanceResource="SlidingBlocks-DLV/encodings/level";
-	public String output="SlidingBlocks-DLV/encodings/output";
-	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
-	//path normali
-	//	public String encodingResource="encodings/SlidingBlocks-Rules";
-	//	public String instanceResource="encodings/level";
-	//	public String output="encodings/output";
+	//	public String encodingResource="SlidingBlocks-DLV/encodings/SlidingBlocks-Rules";
+	//	public String instanceResource="SlidingBlocks-DLV/encodings/level";
+	//	public String output="SlidingBlocks-DLV/encodings/output";
+	//	public Handler handler = new DesktopHandler(new DLVDesktopService("SlidingBlocks-DLV/lib/dlv2.win.x64_4"));
+
+	//path Davide
+	public String encodingResource="encodings/SlidingBlocks-Rules";
+	public String instanceResource="encodings/level";
+	public String output="encodings/output";
+	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
+
+	//path Davide portatile
 	////	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.32_4"));
-	//	public Handler handler = new DesktopHandler(new DLVDesktopService("lib/dlv2.win.x64_4"));
+	//		public String encodingResource="encodings/SlidingBlocks-Rules";
+	//		public String instanceResource="encodings/level";
+	//		public String output="encodings/output";
 
 	public InputProgram  program = new ASPInputProgram();
 	List<Pair<String,Integer>> moveSequence=new ArrayList<Pair<String,Integer>>();
-	List<Pair<String,Integer>> moveSequenceTmp=new ArrayList<Pair<String,Integer>>();
-	List<Pair<String,String>> Nodi=new ArrayList<Pair<String,String>>();
 	Piece[] pieces;
 	Piece selected;
 	int height;
@@ -56,7 +51,7 @@ public class Board {
 	int winX;
 	int winY;
 	boolean movibile = false;
-
+	boolean firstTime=true;
 	public int getNextDirection() {
 		return nextDirection;
 	}
@@ -96,10 +91,6 @@ public class Board {
 		setInstance();
 	}
 
-	/**
-	 * Custom constructor that uses a custom array of pieces
-	 * @param pieces the custom array of pieces that this board holds
-	 */
 	public Board(Piece[] pieces) {
 		this.pieces = pieces;
 		this.height = this.getHeight();
@@ -110,21 +101,10 @@ public class Board {
 		this.selected = null;
 	}
 
-	/**
-	 * Sets configuration to the given number
-	 * @param number input to set configuration to
-	 */
 	public void setConfig(int number) {
 		this.configuration = number;
 	}
 
-	/**
-	 * Reads in a set a lines representing a board state and sets the pieces of
-	 * this board to match it
-	 * @param lines a List of lines with the first being the number of moves,
-	 * and the rest representing the x, y, w, and h of pieces
-	 * @return true if able to successfully read in from file, false otherwise
-	 */
 	public boolean setPieces(List<String> lines) {
 		int i;
 		String[] tokens;
@@ -144,48 +124,21 @@ public class Board {
 
 	}
 
-	/**
-	 * hasWon getter
-	 * @return whether the play has won
-	 */
+
 	public boolean checkWin() { return hasWon; }
 
-	/**
-	 * move getter
-	 * @return the current number of moves
-	 */
+
 	public int getMoves() { return moves; }
 
-	/**
-	 * selectedPiece getter
-	 * @return this board's selectedPiece
-	 */
 	public Piece getSelectedPiece() { return selected; }
 
-	/**
-	 * width getter
-	 * @return this board's width
-	 */
+
 	public int getWidth() { return width; }
 
-	/**
-	 * height getter
-	 * @return this board's height
-	 */
 	public int getHeight() { return height; }
 
-	/**
-	 * pieces getter
-	 * @return this board's pieces
-	 */
 	public Piece[] getPieces() { return pieces; }
 
-	/**
-	 * selects the piece at the given x and y coordinates
-	 * @param x the x coordinate of the point in the piece you want to select
-	 * @param y the y coordinate of the point in the piece you want to select
-	 * @return true if a piece was selected, false otherwise
-	 */
 	public boolean selectPiece(int x, int y) {
 		for (Piece p : pieces) {
 			if (p.containsPoint(x, y)) {
@@ -199,12 +152,6 @@ public class Board {
 		return false;
 	}
 
-	/**
-	 * Checks whether there is a piece occupying a given point
-	 * @param x the x coordinate of the point to check
-	 * @param y the y coordinate of the point to check
-	 * @return true if the point is occupied
-	 */
 	public boolean isOccupied(int x, int y) {
 		for (Piece p : pieces) {
 			if (p.containsPoint(x, y)) {
@@ -215,27 +162,12 @@ public class Board {
 		return false;
 	}
 
-	/**
-	 * Tries to move the selected piece in the given direction
-	 * @param direction 0=up, 1=right, 2=down, 3=left
-	 * @return true if the move was successful, false otherwise
-	 */
 	public boolean movePiece(int direction) {
 		int i;
 
 		if (selected == null || hasWon==true) {
 			return false;
 		}
-
-
-//		 if(configuration>1)
-//			if (selected == pieces[0] && selected.x == 0 &&
-//			selected.y == 1 && direction == 2 || 
-//			selected == pieces[0] && selected.x == 1 &&
-//			selected.y == 2 && direction == 3) {
-//				System.out.println("Vinto");
-//				hasWon = true;
-//			}
 
 		if (direction == 0) {
 			// up
@@ -291,12 +223,9 @@ public class Board {
 		selected.move(direction);
 		++moves;
 		setMatrix();
-//		System.out.println("COORDINATE" + selected.getX() + selected.getY());
 		if(checkVittoria()==true){
 			hasWon = true;
 		}
-		//		printMatrix();
-
 
 		return true;
 	}
@@ -305,8 +234,6 @@ public class Board {
 
 
 		if (selected == pieces[0] && selected.getX() ==winY && selected.getY()==winX) {
-
-
 			System.out.println("Vinto");	
 			return true;
 		}
@@ -319,12 +246,10 @@ public class Board {
 			winX = 1;
 			winY = 0;
 			pieces = new Piece[3];
-			//			pieces[0] = new Piece(0, 2, 1, 0, 1); VERSIONE A, SERVE PER
-			//			pieces[1] = new Piece(1, 1, 1, 1, 1); VERIFICARE CHE LA WIN
-			//			pieces[2] = new Piece(2, 1, 1, 1, 2); FUNZIONI A DOVERE
-			pieces[0] = new Piece(0, 2, 1, 0, 0);
-			pieces[1] = new Piece(1, 1, 1, 0, 2);
-			pieces[2] = new Piece(2, 1, 1, 1, 2);
+			pieces[0] = new Piece(0, 2, 1, 0, 1); 
+			pieces[1] = new Piece(1, 1, 1, 0, 0); 
+			pieces[2] = new Piece(2, 1, 1, 1, 0); 
+
 
 		} else if (configuration == 2) {
 			winX = 2;
@@ -343,12 +268,12 @@ public class Board {
 			pieces[1] = new Piece(1, 1, 1, 0, 0);
 			pieces[2] = new Piece(2, 1, 1, 1, 1);
 			pieces[3] = new Piece(3, 1, 1, 2, 2);
-			pieces[4] = new Piece(5, 1, 1, 2, 1);
-			pieces[5] = new Piece(4, 1, 1, 1, 2);
+			pieces[4] = new Piece(4, 1, 1, 2, 1);
+			pieces[5] = new Piece(5, 1, 1, 1, 2);
 
 		}else if (configuration == 4) {
-			winX = 2;
-			winY = 0;
+			winX = 3;
+			winY = 1;
 			pieces = new Piece[6];
 			pieces[0] = new Piece(0, 2, 2, 0, 1);
 			pieces[1] = new Piece(1, 1, 2, 0, 0);
@@ -356,8 +281,6 @@ public class Board {
 			pieces[3] = new Piece(3, 1, 2, 2, 0);
 			pieces[4] = new Piece(4, 1, 2, 2, 3);
 			pieces[5] = new Piece(5, 2, 1, 2, 1);
-			//			pieces[6] = new Piece(6, 1, 1, 4, 0);
-			//			pieces[7] = new Piece(7, 1, 1, 4, 3);
 		}
 
 		moves = 0;
@@ -366,10 +289,6 @@ public class Board {
 
 	}
 
-	/**
-	 * Converts the entire board to a string, for saving
-	 * @return the String version of this board
-	 */
 	@Override
 	public String toString() {
 		String out = Integer.toString(moves) + "\n";
@@ -382,7 +301,6 @@ public class Board {
 	public void setMatrix() {
 		initMatrix();
 		int id=0;
-		//		System.out.println();
 		for (Piece p : pieces) {
 			for(int i=p.y;i<p.y+p.h;i++) {
 				for(int j=p.x;j<p.x+p.w;j++) {
@@ -421,8 +339,7 @@ public class Board {
 
 	}
 	private void setInstance() {
-		Path path = Paths.get("/SlidingBlocks-DLV/encodings/SlidingBlocks-instance");
-		//		Path path = Paths.get("encodings/SlidingBlocks-instance");
+
 		Output o;
 		AnswerSets answers=null;
 		int contMosse=0;
@@ -480,18 +397,19 @@ public class Board {
 				String temp=st.nextToken();
 				if(temp.contains("muovoGiu") ||temp.contains("muovoSu") ||temp.contains("muovoDestra")||temp.contains("muovoSinistra")) {
 					fillAnswerList(temp);
+
+
 				}
 			}
 		}catch(Exception e){
-			//			System.out.println("No Answerset");
 		}
-
-
 
 		handler.removeProgram(program);
 		handler.removeAll();
 	}
 	public void fillAnswerList(String temp) {
+
+
 		temp = temp.replace(","," ");
 		temp = temp.replace("}"," ");
 		temp = temp.replace("{"," ");
@@ -514,19 +432,24 @@ public class Board {
 				contblank++;
 			}
 		}
-		System.out.println(moveSequence);
+
+
 	}
 
-	public String getNextMatrix(String mossa, String instance) {
-		//Va implementato questo metodo. Ritorna l'istanza dopo averle applicato la mossa.
-		int id=Integer.parseInt(mossa.replaceAll("\\D+","")); //
-		return null;
+
+	public void resetMoveSequence() {
+		System.out.println("CHIAMO RESETMOVE");
+		moveSequence =new ArrayList<Pair<String,Integer>>();
+		selected= null;
+		movibile = false;
+		reset();
+		nextDirection =0;
 	}
 
-	public void moveById(String s){ //Ci serve quando avremo la lista di mosse per la vittoria,ora è inutile.
+	public void moveById(String s){ 
 		int id=0;
 		int direction = 0;
-		s = s.replaceAll("\\D+",""); // rimuove tutti icaratteri
+		s = s.replaceAll("\\D+","");
 		id=Integer.parseInt(s);
 		id/=10;
 		direction=Integer.parseInt(s);
@@ -542,7 +465,6 @@ public class Board {
 		if(movibile==true) {
 			Pair<String, Integer> pair = new Pair<>(direction, selected.getId());
 			moveSequence.add(0, pair);
-			//			System.out.println("Aggiunto: " + pair.toString());
 		}
 
 	}
@@ -552,24 +474,23 @@ public class Board {
 		//		direction 0=up, 1=right, 2=down, 3=left
 		if(moveSequence.get(0).getKey().equals("U")) {
 			nextDirection =0;
-			System.out.println("Ho mosso sù");
+			//System.out.println("Ho mosso sù");
 		}
 		else if(moveSequence.get(0).getKey().equals("D")) {
 			nextDirection=2;
-			System.out.println("Ho mosso giù");
+			//System.out.println("Ho mosso giù");
 		}
 		else if(moveSequence.get(0).getKey().equals("L")) {
 			nextDirection=3;
-			System.out.println("Ho mosso sx");
+			//System.out.println("Ho mosso sx");
 		}
 		else if(moveSequence.get(0).getKey().equals("R")) {
 			nextDirection=1;
-			System.out.println("Ho mosso dx");
+			//System.out.println("Ho mosso dx");
 		}
 		for(Piece p: pieces) {
 			if( p.getId() ==  nextBlock){
 				selected= p;
-				//				System.out.println("Mosso: " + p.getId() + " Direzione: " + moveSequence.get(0).getKey() + " Controllo: " +nextDirection);
 				moveSequence.remove(0);
 				break;
 			}
@@ -609,8 +530,5 @@ public class Board {
 	public void setConfiguration(int configuration) {
 		this.configuration = configuration;
 	}
-
-	
-
 
 }
