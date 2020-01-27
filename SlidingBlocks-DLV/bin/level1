@@ -1,0 +1,9 @@
+coordX(0..1).
+coordY(0..2).
+AltezzaMatrice(1).
+LunghezzaMatrice(2).
+contMosse(0).
+winPosition(1,0).
+blocco(1, 0, 0, 0, 1).
+blocco(0, 0, 1, 0, 0). 
+blocco(0, 0, 2, 1, 0). 
